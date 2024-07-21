@@ -25,9 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
     const menuLinks = document.querySelectorAll('.menu ul li a');
 
-    const cursor = document.createElement('div');
-    cursor.classList.add('cursor');
-    body.appendChild(cursor);
+    const leftCursor = document.querySelector('.left-cursor');
+    const rightCursor = document.querySelector('.right-cursor');
 
     function showImage(index) {
         galleryImage.src = images[index].src;
@@ -45,15 +44,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('mousemove', (event) => {
-        cursor.style.left = `${event.pageX}px`;
-        cursor.style.top = `${event.pageY}px`;
+        const isLeft = event.pageX < window.innerWidth / 2;
+        leftCursor.style.left = `${event.pageX}px`;
+        leftCursor.style.top = `${event.pageY}px`;
+        rightCursor.style.left = `${event.pageX}px`;
+        rightCursor.style.top = `${event.pageY}px`;
 
-        if (event.pageX < window.innerWidth / 2) {
-            cursor.classList.add('left');
-            cursor.classList.remove('right');
+        // Ensure cursor is hidden on body
+        body.style.cursor = 'none';
+
+        if (isLeft) {
+            leftCursor.style.display = 'block';
+            rightCursor.style.display = 'none';
         } else {
-            cursor.classList.add('right');
-            cursor.classList.remove('left');
+            leftCursor.style.display = 'none';
+            rightCursor.style.display = 'block';
         }
 
         let overMenuLink = false;
@@ -66,9 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (overMenuLink) {
-            cursor.style.display = 'none';
+            leftCursor.style.display = 'none';
+            rightCursor.style.display = 'none';
+        } else if (isLeft) {
+            leftCursor.style.display = 'block';
+            rightCursor.style.display = 'none';
         } else {
-            cursor.style.display = 'block';
+            leftCursor.style.display = 'none';
+            rightCursor.style.display = 'block';
         }
     });
 
