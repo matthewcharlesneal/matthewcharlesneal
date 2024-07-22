@@ -190,9 +190,9 @@ body {
         font-size: 30px;
         cursor: pointer;
         position: fixed;
-        top: 5px;
-        right: 25px;
-        color: red; /* Red color for the 'X' button */
+        top: 3.0px;
+        right: 26.15px;
+        color: black; /* Black color for the 'X' button */
         z-index: 1001;
     }
 
@@ -208,10 +208,13 @@ body {
         left: 0;
         background-color: #acacad;
         z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out; /* Add smoother transition effect */
     }
 
     .menu ul.show {
         display: flex;
+        opacity: 1;
     }
 
     .close-menu.show {
