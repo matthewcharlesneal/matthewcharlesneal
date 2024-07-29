@@ -279,6 +279,15 @@ body {
         transition: background-image 1.25s ease-in-out; /* Smooth transition */
     }
 
+    .portrait {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .mobile-image {
         display: block;
         width: 100%;
