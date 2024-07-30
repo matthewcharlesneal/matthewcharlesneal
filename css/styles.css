@@ -85,9 +85,7 @@ body {
     background-repeat: no-repeat;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    transition: opacity 1.25s ease-in-out; /* Smooth transition */
-    display: none; /* Hide all images initially */
-    opacity: 0;
+    transition: background-image 1.25s ease-in-out; /* Smooth transition */
 }
 
 .image.active {
@@ -286,19 +284,7 @@ body {
         background-repeat: no-repeat;
         scroll-snap-align: start;
         scroll-snap-stop: always;
-        transition: opacity 1.25s ease-in-out; /* Smooth transition */
-        display: none;
-        opacity: 0;
-    }
-
-    .image.active {
-        display: block;
-        opacity: 1;
-    }
-
-    .image.inactive {
-        display: none;
-        opacity: 0;
+        transition: background-image 1.25s ease-in-out; /* Smooth transition */
     }
 
     .image:last-child {
@@ -342,4 +328,15 @@ body {
     .close-menu {
         display: none !important;
     }
+}
+
+/* Set initial active state to image10 */
+.image:nth-of-type(-n+9) {
+    display: none;
+    opacity: 0;
+}
+
+.image:nth-of-type(n+10) {
+    display: block;
+    opacity: 1;
 }
