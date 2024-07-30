@@ -19,12 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'images/image17.jpg', orientation: 'landscape' },
         { src: 'images/image18.jpg', orientation: 'landscape' },
         { src: 'images/image19.jpg', orientation: 'landscape' },
-        { src: 'images/image20.jpg', orientation: 'landscape' }
+        { src: 'images/image20.jpg', orientation: 'landscape' },
+        { src: 'images/image1.jpg', orientation: 'landscape' },
+        { src: 'images/image2.jpg', orientation: 'landscape' },
+        { src: 'images/image3.jpg', orientation: 'landscape' }
     ];
     let currentIndex = 0;
     let isTransitioning = false;
 
+    // Ensure the gallery starts at the beginning
     const imageContainer = document.querySelector('.image-container');
+    imageContainer.scrollTop = 0;
+
     const imagesElements = imageContainer.querySelectorAll('.image');
 
     function showImage(index) {
@@ -35,8 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i === index) {
                 img.classList.add('active');
                 img.classList.remove('inactive');
-                // Scroll to the active image
-                img.scrollIntoView({ behavior: 'auto', block: 'start' });
             } else {
                 img.classList.remove('active');
                 img.classList.add('inactive');
@@ -45,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             isTransitioning = false;
-        }, 1250);
+        }, 1250); // Match this timeout with the CSS transition duration (1250ms)
     }
 
     function nextImage() {
@@ -54,8 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function previousImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
+        if (currentIndex > 0) {
+            currentIndex--;
+            showImage(currentIndex);
+        } else {
+            isTransitioning = false; // Reset flag if no more images to go back
+        }
     }
 
     // Scroll functionality for desktop
@@ -70,35 +78,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Swipe functionality for mobile
-    let initialTouchPos = null;
     function handleTouchStart(event) {
         initialTouchPos = event.touches[0].clientY;
     }
 
     function handleTouchMove(event) {
-        if (isTransitioning || initialTouchPos === null) return;
+        if (isTransitioning) return;
 
         const currentTouchPos = event.touches[0].clientY;
         const touchDelta = initialTouchPos - currentTouchPos;
 
-        if (Math.abs(touchDelta) > 20) {
-            if (touchDelta > 0) {
-                nextImage();
-            } else {
-                previousImage();
-            }
-            initialTouchPos = null;
+        if (touchDelta > 20) {
+            nextImage();
+        } else if (touchDelta < -20) {
+            previousImage();
         }
     }
 
-    function handleTouchEnd() {
-        initialTouchPos = null;
-    }
+    let initialTouchPos = null;
 
     window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
-    window.addEventListener('touchend', handleTouchEnd);
+
+    showImage(currentIndex);
 
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
@@ -113,10 +116,4 @@ document.addEventListener('DOMContentLoaded', () => {
         menuList.classList.remove('show');
         closeMenu.classList.remove('show');
     });
-
-    // Ensure the first image is shown and scrolled to when the page loads
-    currentIndex = 0;
-    showImage(currentIndex);
-    imageContainer.scrollTop = 0;
-    imageContainer.offsetHeight; // Force layout recalculation
 });
