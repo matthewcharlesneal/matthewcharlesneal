@@ -1,14 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const images = [
-        { src: 'images/image1.jpg', orientation: 'landscape' },
-        { src: 'images/image2.jpg', orientation: 'landscape' },
-        { src: 'images/image3.jpg', orientation: 'landscape' },
-        { src: 'images/image4.jpg', orientation: 'landscape' },
-        { src: 'images/image5.jpg', orientation: 'landscape' },
-        { src: 'images/image6.jpg', orientation: 'landscape' },
-        { src: 'images/image7.jpg', orientation: 'landscape' },
-        { src: 'images/image8.jpg', orientation: 'landscape' },
-        { src: 'images/image9.jpg', orientation: 'landscape' },
         { src: 'images/image10.jpg', orientation: 'portrait' },
         { src: 'images/image11.jpg', orientation: 'portrait' },
         { src: 'images/image12.jpg', orientation: 'portrait' },
