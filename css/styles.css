@@ -274,7 +274,7 @@ body {
     }
 
     .image.inactive {
-        opacity: 0.5; /* Reduced opacity for inactive images */
+        opacity: 1; /* Reduced opacity for inactive images */
     }
 
     .image:last-child {
