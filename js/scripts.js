@@ -55,22 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Debounce function to limit the rate at which a function can fire
-    function debounce(func, wait = 20, immediate = true) {
-        let timeout;
-        return function() {
-            const context = this, args = arguments;
-            const later = function() {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            const callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
-        };
-    }
-
     // Scroll functionality for desktop
     function handleScroll(event) {
         if (window.innerWidth > 600 && !isTransitioning) {
@@ -83,14 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Swipe functionality for mobile
-    let initialTouchPos = null;
-
     function handleTouchStart(event) {
         initialTouchPos = event.touches[0].clientY;
     }
 
     function handleTouchMove(event) {
-        if (isTransitioning || initialTouchPos === null) return;
+        if (isTransitioning) return;
 
         const currentTouchPos = event.touches[0].clientY;
         const touchDelta = initialTouchPos - currentTouchPos;
@@ -100,16 +82,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (touchDelta < -20) {
             previousImage();
         }
-
-        initialTouchPos = null; // Reset the touch position after handling
     }
 
-    window.addEventListener('wheel', debounce(handleScroll));
+    let initialTouchPos = null;
+
+    window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
-    // Initial display
-    showImage(currentIndex);
+    // Ensure the correct image is shown on page load without causing rapid cycling
+    setTimeout(() => {
+        showImage(currentIndex);
+    }, 50);
 
     // Menu toggle functionality
     const menuToggle = document.getElementById('menuToggle');
