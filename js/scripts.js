@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'images/image20.jpg', orientation: 'landscape' }
     ];
 
-    // Start at image10
-    let currentIndex = 9; // Zero-based index (9 means image10)
+    let currentIndex = 0; // Start with image10 (index 0)
     let isTransitioning = false;
 
     const imageContainer = document.querySelector('.image-container');
@@ -37,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             isTransitioning = false;
         }, 1250); // Match this timeout with the CSS transition duration (1250ms)
+
+        // Scroll the current image into view
+        imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function nextImage() {
@@ -65,12 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Swipe functionality for mobile
+    let initialTouchPos = null;
+
     function handleTouchStart(event) {
         initialTouchPos = event.touches[0].clientY;
     }
 
     function handleTouchMove(event) {
-        if (isTransitioning) return;
+        if (isTransitioning || initialTouchPos === null) return;
 
         const currentTouchPos = event.touches[0].clientY;
         const touchDelta = initialTouchPos - currentTouchPos;
@@ -80,16 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (touchDelta < -20) {
             previousImage();
         }
-    }
 
-    let initialTouchPos = null;
+        initialTouchPos = null; // Reset the touch position after handling
+    }
 
     window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
-    showImage(currentIndex); // Show image10 on initial load
+    // Initial display
+    showImage(currentIndex);
 
+    // Menu toggle functionality
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
     const closeMenu = document.getElementById('closeMenu');
