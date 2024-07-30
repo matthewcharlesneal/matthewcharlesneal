@@ -55,6 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Debounce function to limit the rate at which a function can fire
+    function debounce(func, wait = 20, immediate = true) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            const later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    }
+
     // Scroll functionality for desktop
     function handleScroll(event) {
         if (window.innerWidth > 600 && !isTransitioning) {
@@ -88,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initialTouchPos = null; // Reset the touch position after handling
     }
 
-    window.addEventListener('wheel', handleScroll);
+    window.addEventListener('wheel', debounce(handleScroll));
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
