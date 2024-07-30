@@ -15,10 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0; // Ensure the gallery starts with image10
     let isTransitioning = false;
 
-    // Ensure the gallery starts at the beginning
     const imageContainer = document.querySelector('.image-container');
-    imageContainer.scrollTop = 0;
-
     const imagesElements = imageContainer.querySelectorAll('.image');
 
     function showImage(index) {
@@ -54,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Scroll functionality for desktop
     function handleScroll(event) {
         if (window.innerWidth > 600 && !isTransitioning) {
             if (event.deltaY > 0) {
@@ -65,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Swipe functionality for mobile
     function handleTouchStart(event) {
         initialTouchPos = event.touches[0].clientY;
     }
@@ -93,9 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
     showImage(currentIndex);
 
     // Explicitly set the first image on page load
-    const firstImageElement = imagesElements[0];
-    firstImageElement.classList.add('active');
-    firstImageElement.classList.remove('inactive');
+    imagesElements.forEach((img, i) => {
+        if (i === 0) {
+            img.classList.add('active');
+            img.classList.remove('inactive');
+        } else {
+            img.classList.add('inactive');
+            img.classList.remove('active');
+        }
+    });
 
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
