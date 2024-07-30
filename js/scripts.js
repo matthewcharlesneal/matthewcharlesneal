@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'images/image19.jpg', orientation: 'landscape' },
         { src: 'images/image20.jpg', orientation: 'landscape' }
     ];
-    let currentIndex = 0;
+    let currentIndex = 0; // Ensure the gallery starts with image10
     let isTransitioning = false;
 
     // Ensure the gallery starts at the beginning
@@ -89,7 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
+    // Ensure image10 is shown first
     showImage(currentIndex);
+
+    // Explicitly set the first image on page load
+    const firstImageElement = imagesElements[0];
+    firstImageElement.classList.add('active');
+    firstImageElement.classList.remove('inactive');
 
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
