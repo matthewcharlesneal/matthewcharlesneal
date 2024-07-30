@@ -4,28 +4,30 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'images/image2.jpg', orientation: 'landscape' },
         { src: 'images/image3.jpg', orientation: 'landscape' },
         { src: 'images/image4.jpg', orientation: 'landscape' },
-	{ src: 'images/image5.jpg', orientation: 'landscape' },
+        { src: 'images/image5.jpg', orientation: 'landscape' },
         { src: 'images/image6.jpg', orientation: 'landscape' },
         { src: 'images/image7.jpg', orientation: 'landscape' },
         { src: 'images/image8.jpg', orientation: 'landscape' },
-	{ src: 'images/image9.jpg', orientation: 'landscape' },
+        { src: 'images/image9.jpg', orientation: 'landscape' },
         { src: 'images/image10.jpg', orientation: 'portrait' },
         { src: 'images/image11.jpg', orientation: 'portrait' },
         { src: 'images/image12.jpg', orientation: 'portrait' },
-	{ src: 'images/image13.jpg', orientation: 'portrait' },
+        { src: 'images/image13.jpg', orientation: 'portrait' },
         { src: 'images/image14.jpg', orientation: 'portrait' },
         { src: 'images/image15.jpg', orientation: 'landscape' },
         { src: 'images/image16.jpg', orientation: 'landscape' },
-	{ src: 'images/image17.jpg', orientation: 'landscape' },
+        { src: 'images/image17.jpg', orientation: 'landscape' },
         { src: 'images/image18.jpg', orientation: 'landscape' },
         { src: 'images/image19.jpg', orientation: 'landscape' },
         { src: 'images/image20.jpg', orientation: 'landscape' }
- 
     ];
     let currentIndex = 0;
     let isTransitioning = false;
 
+    // Ensure the gallery starts at the beginning
     const imageContainer = document.querySelector('.image-container');
+    imageContainer.scrollTop = 0;
+
     const imagesElements = imageContainer.querySelectorAll('.image');
 
     function showImage(index) {
