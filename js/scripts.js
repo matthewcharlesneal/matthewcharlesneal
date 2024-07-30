@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'images/image19.jpg', orientation: 'landscape' },
         { src: 'images/image20.jpg', orientation: 'landscape' }
     ];
-    let currentIndex = 0; // Ensure the gallery starts with image10
+
+    // Start at image10
+    let currentIndex = 9; // Zero-based index (9 means image10)
     let isTransitioning = false;
 
     const imageContainer = document.querySelector('.image-container');
@@ -51,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Scroll functionality for desktop
     function handleScroll(event) {
         if (window.innerWidth > 600 && !isTransitioning) {
             if (event.deltaY > 0) {
@@ -61,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Swipe functionality for mobile
     function handleTouchStart(event) {
         initialTouchPos = event.touches[0].clientY;
     }
@@ -84,19 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
-    // Ensure image10 is shown first
-    showImage(currentIndex);
-
-    // Explicitly set the first image on page load
-    imagesElements.forEach((img, i) => {
-        if (i === 0) {
-            img.classList.add('active');
-            img.classList.remove('inactive');
-        } else {
-            img.classList.add('inactive');
-            img.classList.remove('active');
-        }
-    });
+    showImage(currentIndex); // Show image10 on initial load
 
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
