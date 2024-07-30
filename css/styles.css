@@ -89,23 +89,13 @@ body {
 }
 
 .image.active {
-    display: block;
     opacity: 1;
+    transition: opacity 0.5s ease-in-out; /* Smooth transition for active image */
 }
 
 .image.inactive {
-    display: none;
-    opacity: 0;
-}
-
-.landscape {
-    background-size: contain; /* Ensure the image fits within the container */
-}
-
-.portrait {
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
+    opacity: 0.5;
+    transition: opacity 0.5s ease-in-out; /* Smooth transition for inactive image */
 }
 
 .footer {
@@ -328,15 +318,4 @@ body {
     .close-menu {
         display: none !important;
     }
-}
-
-/* Set initial active state to image10 */
-.image:nth-of-type(-n+9) {
-    display: none;
-    opacity: 0;
-}
-
-.image:nth-of-type(n+10) {
-    display: block;
-    opacity: 1;
 }
