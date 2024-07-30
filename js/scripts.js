@@ -10,10 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'images/image17.jpg', orientation: 'landscape' },
         { src: 'images/image18.jpg', orientation: 'landscape' },
         { src: 'images/image19.jpg', orientation: 'landscape' },
-        { src: 'images/image20.jpg', orientation: 'landscape' },
-        { src: 'images/image1.jpg', orientation: 'landscape' },
-        { src: 'images/image2.jpg', orientation: 'landscape' },
-        { src: 'images/image3.jpg', orientation: 'landscape' }
+        { src: 'images/image20.jpg', orientation: 'landscape' }
     ];
     let currentIndex = 0;
     let isTransitioning = false;
