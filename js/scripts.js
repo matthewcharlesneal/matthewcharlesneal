@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentIndex = 0; // Start with image10 (index 0)
     let isTransitioning = false;
+    let scrollingEnabled = true;
 
     const imageContainer = document.querySelector('.image-container');
     const imagesElements = imageContainer.querySelectorAll('.image');
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Scroll functionality for desktop
     function handleScroll(event) {
-        if (window.innerWidth > 600 && !isTransitioning) {
+        if (window.innerWidth > 600 && scrollingEnabled && !isTransitioning) {
             if (event.deltaY > 0) {
                 nextImage();
             } else if (event.deltaY < 0) {
@@ -110,12 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
         closeMenu.classList.remove('show');
     });
 
-    // Enable scroll snap only when cursor is over the image gallery
+    // Enable or disable scrolling based on cursor position
     document.addEventListener('mousemove', function(event) {
         if (event.clientX > 245) { // Cursor is over the image gallery
-            imageContainer.classList.add('scroll-snap');
+            scrollingEnabled = true;
         } else { // Cursor is not over the image gallery
-            imageContainer.classList.add('scroll-snap'); // Ensure scroll snap is always applied
+            scrollingEnabled = false;
         }
     });
 });
