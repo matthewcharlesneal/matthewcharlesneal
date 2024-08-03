@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentIndex = 0; // Start with image10 (index 0)
     let isTransitioning = false;
+    let isInitialized = false;
 
     const imageContainer = document.querySelector('.image-container');
     const imagesElements = imageContainer.querySelectorAll('.image');
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show the container once everything is ready
         imageContainer.style.visibility = 'visible';
+        isInitialized = true;
 
         window.addEventListener('wheel', handleScroll);
         window.addEventListener('touchstart', handleTouchStart);
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showImage(index) {
-        if (isTransitioning) return;
+        if (isTransitioning || !isInitialized) return;
         isTransitioning = true;
 
         imagesElements.forEach((img, i) => {
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Scroll functionality for desktop
     function handleScroll(event) {
-        if (window.innerWidth > 600 && !isTransitioning) {
+        if (window.innerWidth > 600 && !isTransitioning && isInitialized) {
             if (event.deltaY > 0) {
                 nextImage();
             } else if (event.deltaY < 0) {
@@ -103,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleTouchMove(event) {
-        if (isTransitioning || initialTouchPos === null) return;
+        if (isTransitioning || initialTouchPos === null || !isInitialized) return;
 
         const currentTouchPos = event.touches[0].clientY;
         const touchDelta = initialTouchPos - currentTouchPos;
