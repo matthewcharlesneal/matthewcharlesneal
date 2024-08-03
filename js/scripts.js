@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.clientX > 245) { // Cursor is over the image gallery
             imageContainer.classList.add('scroll-snap');
         } else { // Cursor is not over the image gallery
-            imageContainer.classList.remove('scroll-snap');
+            imageContainer.classList.add('scroll-snap'); // Ensure scroll snap is always applied
         }
     });
 });
