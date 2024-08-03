@@ -7,7 +7,6 @@ body, html {
     overflow: hidden;
     background-color: #fff;
     font-family: 'EB Garamond', serif;
-    cursor: none; /* Ensure cursor is hidden globally */
 }
 
 body {
@@ -15,11 +14,9 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    cursor: none; /* Ensure cursor is hidden on body */
 }
 
 .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
-    cursor: none; /* Ensure cursor is hidden on specific elements */
 }
 
 .menu {
@@ -219,9 +216,9 @@ body {
         display: none;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         width: 100%;
-        height: 100vh;
+        height: calc(100vh - 40px); /* Adjusted height to account for header/footer */
         position: fixed;
         top: 0;
         left: 0;
@@ -229,6 +226,8 @@ body {
         z-index: 1000;
         opacity: 0;
         transition: opacity 0.5s ease-in-out; /* Add smoother transition effect */
+        padding-top: 60px; /* Space for header */
+        padding-bottom: 40px; /* Space for footer */
     }
 
     .menu ul.show {
