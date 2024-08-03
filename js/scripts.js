@@ -19,6 +19,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageContainer = document.querySelector('.image-container');
     const imagesElements = imageContainer.querySelectorAll('.image');
 
+    // Preload images
+    let imagesLoaded = 0;
+    images.forEach((image, index) => {
+        const img = new Image();
+        img.src = image.src;
+        img.onload = () => {
+            imagesLoaded++;
+            // Once all images are loaded, initialize the slideshow
+            if (imagesLoaded === images.length) {
+                initializeSlideshow();
+            }
+        };
+    });
+
+    function initializeSlideshow() {
+        // Initial display
+        showImage(currentIndex);
+
+        window.addEventListener('wheel', handleScroll);
+        window.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchmove', handleTouchMove);
+    }
+
     function showImage(index) {
         if (isTransitioning) return;
         isTransitioning = true;
@@ -87,13 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         initialTouchPos = null; // Reset the touch position after handling
     }
-
-    window.addEventListener('wheel', handleScroll);
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-
-    // Initial display
-    showImage(currentIndex);
 
     // Menu toggle functionality
     const menuToggle = document.getElementById('menuToggle');
