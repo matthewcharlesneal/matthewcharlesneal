@@ -71,6 +71,7 @@ body {
     scroll-behavior: smooth; /* Smooth scrolling */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+    visibility: hidden; /* Hide the container initially */
 }
 
 .image-container::-webkit-scrollbar {
