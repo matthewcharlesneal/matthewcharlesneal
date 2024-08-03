@@ -63,7 +63,7 @@ body {
 .image-container {
     margin-left: 245px;
     width: calc(100% - 245px);
-    height: 100vh; /* Ensure the container fills the viewport height */
+    height: 100%;
     display: flex;
     flex-direction: column;
     scroll-snap-type: y mandatory;
@@ -71,7 +71,6 @@ body {
     scroll-behavior: smooth; /* Smooth scrolling */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
-    visibility: hidden; /* Hide the container initially */
 }
 
 .image-container::-webkit-scrollbar {
@@ -79,7 +78,7 @@ body {
 }
 
 .image {
-    flex: 0 0 100vh; /* Ensure each image fills the viewport height */
+    flex: 0 0 100vh;
     width: 100%;
     background-size: contain; /* Ensure the image fits within the container */
     background-position: center;
@@ -88,14 +87,6 @@ body {
     scroll-snap-stop: always;
     transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
     opacity: 1; /* Default to full opacity */
-}
-
-.image:first-child {
-    margin-top: 0; /* Ensure no margin at the top of the first image */
-}
-
-.image:last-child {
-    margin-bottom: 0; /* Ensure no margin at the bottom of the last image */
 }
 
 .image.active {
@@ -258,8 +249,11 @@ body {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh; /* Adjusted height to ensure it fills the viewport */
+        height: calc(100vh - 40px); /* Adjusted height to account for header/footer */
         width: 100%;
+        position: absolute; /* Absolute positioning for vertical centering */
+        top: 50%;
+        transform: translateY(-50%); /* Center container vertically */
         scroll-snap-type: y mandatory;
         overflow-y: scroll;
         scroll-behavior: smooth; /* Smooth scrolling */
@@ -272,7 +266,7 @@ body {
     }
 
     .image {
-        flex: 0 0 100vh; /* Ensure each image fills the viewport height */
+        flex: 0 0 calc(100vh - 40px); /* Adjusted height to match container */
         width: 100%;
         background-size: contain; /* Ensure the image fits within the container */
         background-position: center;
@@ -283,12 +277,16 @@ body {
         opacity: 1; /* Default to full opacity */
     }
 
-    .image:first-child {
-        margin-top: 0; /* Ensure no margin at the top of the first image */
+    .image.active {
+        opacity: 1; /* Ensure active images have full opacity */
+    }
+
+    .image.inactive {
+        opacity: 1; /* Ensure inactive images also have full opacity for testing */
     }
 
     .image:last-child {
-        margin-bottom: 0; /* Ensure no margin at the bottom of the last image */
+        flex: 1 0 calc(100vh - 40px); /* Make sure the last image fills the remaining space */
     }
 
     .mobile-image {
