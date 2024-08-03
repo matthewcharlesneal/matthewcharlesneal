@@ -66,7 +66,6 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    scroll-snap-type: y mandatory;
     overflow-y: scroll;
     scroll-behavior: smooth; /* Smooth scrolling */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
@@ -106,6 +105,18 @@ body {
     left: 20px;
     width: calc(100% - 40px);
     white-space: nowrap;
+}
+
+/* Add this media query to make the cursor visible on desktop */
+@media (min-width: 601px) {
+    body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
+        cursor: auto; /* Reset cursor to default */
+    }
+}
+
+/* Scroll snap styles */
+.scroll-snap {
+    scroll-snap-type: y mandatory;
 }
 
 /* Mobile styles */
