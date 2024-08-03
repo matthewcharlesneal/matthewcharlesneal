@@ -155,7 +155,10 @@ body {
         background-color: #fff;
         display: flex;
         justify-content: flex-end;
-        padding: 10px 20px;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 10px; /* Added padding for the bottom */
+        padding-left: 20px;
     }
 
     .menu h1 {
