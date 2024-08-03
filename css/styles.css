@@ -223,7 +223,7 @@ body {
         width: 100%;
         height: 100vh;
         position: fixed;
-        top: -10px; /* Adjusted top property to be 10px higher */
+        top: -20px; /* Adjusted top property to be 20px higher */
         left: 0;
         background-color: #acacad;
         z-index: 1000;
