@@ -212,8 +212,8 @@ body {
         font-size: 30px;
         cursor: pointer;
         position: fixed;
-        top: 3.0px;
-        right: 26.15px;
+        top: 3px; /* Adjusted for better positioning */
+        right: 26px; /* Adjusted for better positioning */
         color: black; /* Black color for the 'X' button */
         z-index: 1001;
     }
@@ -222,7 +222,7 @@ body {
         display: none;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: center; /* Center items vertically */
         width: 100%;
         height: 100vh;
         position: fixed;
