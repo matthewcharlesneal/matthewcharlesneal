@@ -137,10 +137,11 @@ body {
     }
 
     header h1 {
-        font-size: 20px;
+        font-size: 24px; /* Match font size */
         font-weight: bold;
         width: 100%;
         text-align: center;
+        margin: 0; /* Ensure no additional margin */
     }
 
     .menu {
@@ -153,16 +154,6 @@ body {
         display: flex;
         justify-content: flex-end;
         padding: 10px 20px;
-    }
-
-    .menu h1 {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        margin: 0;
-        font-size: 12px;
-        text-align: center;
     }
 
     .menu-toggle {
@@ -308,20 +299,22 @@ body {
         font-family: 'EB Garamond', serif;
         left: 0;
         right: 0;
+        font-size: 14px; /* Match font size */
+        margin: 0; /* Ensure no additional margin */
     }
 
     .menu ul::before {
-        content: "Matthew Neal"; /* Your name as header */
+        content: "Matthew Charles Neal"; /* Your name as header */
         display: block;
-        font-size: 24px;
+        font-size: 24px; /* Match font size */
         font-weight: bold;
         margin-bottom: 20px;
     }
 
     .menu ul::after {
-        content: "© 2024 Matthew Neal"; /* Copyright as footer */
+        content: "© 2024 Matthew Charles Neal. All rights reserved."; /* Copyright as footer */
         display: block;
-        font-size: 14px;
+        font-size: 14px; /* Match font size */
         margin-top: 20px;
     }
 }
