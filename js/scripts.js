@@ -115,8 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', function(event) {
         if (event.clientX > 245) { // Cursor is over the image gallery
             scrollingEnabled = true;
+            imageContainer.classList.add('scroll-snap');
         } else { // Cursor is not over the image gallery
             scrollingEnabled = false;
+            imageContainer.classList.remove('scroll-snap');
         }
     });
 });
