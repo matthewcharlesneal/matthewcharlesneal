@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageContainer = document.querySelector('.image-container');
     const imagesElements = imageContainer.querySelectorAll('.image');
 
+    // Hide the container initially
+    imageContainer.style.visibility = 'hidden';
+
     // Preload images
     let imagesLoaded = 0;
     images.forEach((image, index) => {
@@ -36,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function initializeSlideshow() {
         // Initial display
         showImage(currentIndex);
+
+        // Show the container once everything is ready
+        imageContainer.style.visibility = 'visible';
 
         window.addEventListener('wheel', handleScroll);
         window.addEventListener('touchstart', handleTouchStart);
