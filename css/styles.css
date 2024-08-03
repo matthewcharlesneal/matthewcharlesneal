@@ -216,19 +216,19 @@ body {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Align items to the start */
+    justify-content: center; /* Center items vertically */
     gap: 5px; /* Adjust this value to control the spacing between items */
     width: 100%;
-    height: calc(100vh - 40px); /* Adjusted height to account for header/footer */
+    height: auto; /* Change height to auto */
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
     background-color: #acacad;
     z-index: 1000;
     opacity: 0;
     transition: opacity 0.5s ease-in-out; /* Add smoother transition effect */
-    padding-top: 20px; /* Space for header */
-    padding-bottom: 20px; /* Space for footer */
+    padding-top: 0; /* Remove padding for header */
+    padding-bottom: 0; /* Remove padding for footer */
 }
 
 
