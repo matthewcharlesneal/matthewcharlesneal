@@ -240,7 +240,8 @@ body {
     }
 
     .menu ul li {
-        margin: 10px 0;
+        margin: 5px 0; /* Less space between menu items */
+        font-size: 18px; /* Adjust font size if needed */
     }
 
     .image-container {
@@ -307,6 +308,21 @@ body {
         font-family: 'EB Garamond', serif;
         left: 0;
         right: 0;
+    }
+
+    .menu ul::before {
+        content: "Matthew Neal"; /* Your name as header */
+        display: block;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .menu ul::after {
+        content: "© 2024 Matthew Neal"; /* Copyright as footer */
+        display: block;
+        font-size: 14px;
+        margin-top: 20px;
     }
 }
 
