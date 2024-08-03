@@ -108,6 +108,13 @@ body {
     white-space: nowrap;
 }
 
+/* Desktop styles */
+@media (min-width: 601px) {
+    body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
+        cursor: auto; /* Reset cursor to default */
+    }
+}
+
 /* Mobile styles */
 @media only screen and (max-width: 600px) {
     body, .menu, h1, ul, li, a, .image-container, img, header, main {
