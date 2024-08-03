@@ -16,6 +16,8 @@ body {
     align-items: center;
     justify-content: flex-start;
     cursor: none; /* Ensure cursor is hidden on body */
+    scroll-snap-type: y mandatory; /* Add scroll snap type to the body */
+    overflow-y: scroll; /* Enable scrolling on the body */
 }
 
 .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
@@ -108,7 +110,7 @@ body {
     white-space: nowrap;
 }
 
-/* Desktop styles */
+/* Add this media query to make the cursor visible on desktop */
 @media (min-width: 601px) {
     body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
         cursor: auto; /* Reset cursor to default */
