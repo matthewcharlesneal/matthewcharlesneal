@@ -1,0 +1,329 @@
+/* General styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    font-family: 'EB Garamond', serif;
+    cursor: none; /* Ensure cursor is hidden globally */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: none; /* Ensure cursor is hidden on body */
+}
+
+.menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
+    cursor: none; /* Ensure cursor is hidden on specific elements */
+}
+
+.menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 100%;
+    background-color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.menu h1 {
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.menu ul li {
+    margin-bottom: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+    display: block;
+    padding: 10px 0;
+}
+
+.image-container {
+    margin-left: 245px;
+    width: calc(100% - 245px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    scroll-behavior: smooth; /* Smooth scrolling */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+}
+
+.image-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+}
+
+.image {
+    flex: 0 0 100vh;
+    width: 100%;
+    background-size: contain; /* Ensure the image fits within the container */
+    background-position: center;
+    background-repeat: no-repeat;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
+    opacity: 1; /* Default to full opacity */
+}
+
+.image.active {
+    opacity: 1; /* Ensure active images have full opacity */
+}
+
+.image.inactive {
+    opacity: 1; /* Ensure inactive images also have full opacity for testing */
+}
+
+.footer {
+    font-size: 10px;
+    color: #333;
+    text-align: left;
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    width: calc(100% - 40px);
+    white-space: nowrap;
+}
+
+/* Mobile styles */
+@media only screen and (max-width: 600px) {
+    body, .menu, h1, ul, li, a, .image-container, img, header, main {
+        all: unset;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        font-family: 'EB Garamond', serif;
+        height: 100vh;
+        overflow: hidden;
+        text-align: center;
+        width: 100%;
+    }
+
+    header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        background-color: #fff;
+        border-bottom: 1px solid #ccc;
+        width: 100%;
+    }
+
+    header h1 {
+        font-size: 20px;
+        font-weight: bold;
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background-color: #fff;
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px 20px;
+    }
+
+    .menu h1 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+    }
+
+    .menu-toggle .hamburger {
+        width: 20px;
+        height: 2px;
+        background-color: #333;
+        position: relative;
+        transition: all 0.3s;
+    }
+
+    .menu-toggle .hamburger::before,
+    .menu-toggle .hamburger::after {
+        content: '';
+        width: 20px;
+        height: 2px;
+        background-color: #333;
+        position: absolute;
+        left: 0;
+        transition: all 0.3s;
+    }
+
+    .menu-toggle .hamburger::before {
+        top: -6px;
+    }
+
+    .menu-toggle .hamburger::after {
+        top: 6px;
+    }
+
+    .close-menu {
+        display: none;
+        font-size: 30px;
+        cursor: pointer;
+        position: fixed;
+        top: 3.0px;
+        right: 26.15px;
+        color: black; /* Black color for the 'X' button */
+        z-index: 1001;
+    }
+
+    .menu ul {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #acacad;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out; /* Add smoother transition effect */
+    }
+
+    .menu ul.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .close-menu.show {
+        display: block;
+    }
+
+    .menu ul li {
+        margin: 10px 0;
+    }
+
+    .image-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 40px); /* Adjusted height to account for header/footer */
+        width: 100%;
+        position: absolute; /* Absolute positioning for vertical centering */
+        top: 50%;
+        transform: translateY(-50%); /* Center container vertically */
+        scroll-snap-type: y mandatory;
+        overflow-y: scroll;
+        scroll-behavior: smooth; /* Smooth scrolling */
+        scrollbar-width: none; /* Hide scrollbar for Firefox */
+        -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+    }
+
+    .image-container::-webkit-scrollbar {
+        display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+    }
+
+    .image {
+        flex: 0 0 calc(100vh - 40px); /* Adjusted height to match container */
+        width: 100%;
+        background-size: contain; /* Ensure the image fits within the container */
+        background-position: center;
+        background-repeat: no-repeat;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
+        opacity: 1; /* Default to full opacity */
+    }
+
+    .image.active {
+        opacity: 1; /* Ensure active images have full opacity */
+    }
+
+    .image.inactive {
+        opacity: 1; /* Ensure inactive images also have full opacity for testing */
+    }
+
+    .image:last-child {
+        flex: 1 0 calc(100vh - 40px); /* Make sure the last image fills the remaining space */
+    }
+
+    .mobile-image {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .desktop-image {
+        display: none;
+    }
+
+    .footer {
+        text-align: center;
+        width: 100%;
+        position: fixed;
+        bottom: 15px;
+        font-family: 'EB Garamond', serif;
+        left: 0;
+        right: 0;
+    }
+}
+
+/* Desktop styles */
+.desktop-image {
+    display: block;
+    width: auto;
+}
+
+.mobile-image {
+    display: none;
+}
+
+/* Hide the close-menu element on desktop screens */
+@media (min-width: 601px) {
+    .close-menu {
+        display: none !important;
+    }
+}
