@@ -109,4 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
         menuList.classList.remove('show');
         closeMenu.classList.remove('show');
     });
+
+    // Enable scroll snap only when cursor is over the image gallery
+    document.addEventListener('mousemove', function(event) {
+        if (event.clientX > 245) { // Cursor is over the image gallery
+            imageContainer.classList.add('scroll-snap');
+        } else { // Cursor is not over the image gallery
+            imageContainer.classList.remove('scroll-snap');
+        }
+    });
 });
