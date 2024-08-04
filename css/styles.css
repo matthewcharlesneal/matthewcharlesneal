@@ -91,7 +91,7 @@ body {
 
 /* Add white space between images except the last one */
 .image:not(:last-child) {
-    margin-bottom: 20px; /* Add white space between images */
+    margin-bottom: 40px; /* Add white space between images */
 }
 
 .image.active {
