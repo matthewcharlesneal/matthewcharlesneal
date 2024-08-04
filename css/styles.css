@@ -116,14 +116,14 @@ body {
 
     /* Add white space between images except the last one on desktop */
     .image:not(:last-child) {
-        margin-bottom: 40px; /* Add white space between images */
+        margin-bottom: 30px; /* Add white space between images */
     }
 }
 
 /* Mobile styles */
 @media (max-width: 600px) {
     .image:not(:last-child) {
-        margin-bottom: 20px; /* Adjust white space between images for mobile */
+        margin-bottom: 0px; /* Adjust white space between images for mobile */
     }
 }
 
