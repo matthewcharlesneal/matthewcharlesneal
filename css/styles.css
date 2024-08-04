@@ -89,11 +89,6 @@ body {
     opacity: 1; /* Default to full opacity */
 }
 
-/* Add white space between images except the last one */
-.image:not(:last-child) {
-    margin-bottom: 40px; /* Add white space between images */
-}
-
 .image.active {
     opacity: 1; /* Ensure active images have full opacity */
 }
@@ -118,12 +113,25 @@ body {
     body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
         cursor: auto; /* Reset cursor to default */
     }
+
+    /* Add white space between images except the last one on desktop */
+    .image:not(:last-child) {
+        margin-bottom: 40px; /* Add white space between images */
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+    .image:not(:last-child) {
+        margin-bottom: 20px; /* Adjust white space between images for mobile */
+    }
 }
 
 /* Scroll snap styles */
 .scroll-snap {
     scroll-snap-type: y mandatory;
 }
+
 
 
 /* Mobile styles */
