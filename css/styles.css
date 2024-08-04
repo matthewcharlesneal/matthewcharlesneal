@@ -78,9 +78,8 @@ body {
 }
 
 .image {
-    flex: 0 0 calc(100vh - 20px); /* Adjust height to include white space */
+    flex: 0 0 100vh;
     width: 100%;
-    margin-bottom: 20px; /* Add white space between images */
     background-size: contain; /* Ensure the image fits within the container */
     background-position: center;
     background-repeat: no-repeat;
@@ -88,6 +87,11 @@ body {
     scroll-snap-stop: always;
     transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
     opacity: 1; /* Default to full opacity */
+}
+
+/* Add white space between images except the last one */
+.image:not(:last-child) {
+    margin-bottom: 20px; /* Add white space between images */
 }
 
 .image.active {
