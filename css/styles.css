@@ -68,6 +68,7 @@ body {
     flex-direction: column;
     overflow-y: scroll;
     scroll-behavior: smooth; /* Smooth scrolling */
+    scroll-snap-type: y mandatory;
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
 }
@@ -77,8 +78,9 @@ body {
 }
 
 .image {
-    flex: 0 0 100vh;
+    flex: 0 0 calc(100vh - 20px); /* Adjust height to include white space */
     width: 100%;
+    margin-bottom: 20px; /* Add white space between images */
     background-size: contain; /* Ensure the image fits within the container */
     background-position: center;
     background-repeat: no-repeat;
@@ -118,6 +120,7 @@ body {
 .scroll-snap {
     scroll-snap-type: y mandatory;
 }
+
 
 /* Mobile styles */
 @media only screen and (max-width: 600px) {
