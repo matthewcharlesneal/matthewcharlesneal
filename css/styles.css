@@ -272,47 +272,48 @@ body {
     .image-container {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start; /* Changed from center to flex-start */
         align-items: center;
         height: calc(100vh - 40px); /* Adjusted height to account for header/footer */
         width: 100%;
-        position: absolute; /* Absolute positioning for vertical centering */
-        top: 50%;
-        transform: translateY(-50%); /* Center container vertically */
+        position: absolute;
+        top: 40px; /* Changed from 50% to 40px to align with the top */
+        transform: none; /* Removed vertical centering */
         scroll-snap-type: y mandatory;
-        scroll-snap-stop: always; /* Added this line */
+        scroll-snap-stop: always;
         overflow-y: scroll;
-        scroll-behavior: smooth; /* Smooth scrolling */
-        scrollbar-width: none; /* Hide scrollbar for Firefox */
-        -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        margin-left: 0; /* Reset margin for mobile */
     }
 
     .image-container::-webkit-scrollbar {
-        display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+        display: none;
     }
 
     .image {
-        flex: 0 0 calc(100vh - 40px); /* Adjusted height to match container */
+        flex: 0 0 calc(100vh - 40px);
         width: 100%;
-        background-size: contain; /* Ensure the image fits within the container */
+        background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
         scroll-snap-align: start;
         scroll-snap-stop: always;
-        transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
-        opacity: 1; /* Default to full opacity */
+        transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out;
+        opacity: 1;
     }
 
     .image.active {
-        opacity: 1; /* Ensure active images have full opacity */
+        opacity: 1;
     }
 
     .image.inactive {
-        opacity: 1; /* Ensure inactive images also have full opacity for testing */
+        opacity: 1;
     }
 
     .image:last-child {
-        flex: 1 0 calc(100vh - 40px); /* Make sure the last image fills the remaining space */
+        flex: 1 0 calc(100vh - 40px);
     }
 
     .mobile-image {
@@ -345,6 +346,7 @@ body {
 
 .mobile-image {
     display: none;
+    /* Style for mobile images */
 }
 
 /* Hide the close-menu element on desktop screens */
