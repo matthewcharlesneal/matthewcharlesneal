@@ -22,14 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagesElements = imageContainer.querySelectorAll('.image');
 
     function preloadImages(images) {
-        return Promise.all(images.map(img => {
-            return new Promise((resolve, reject) => {
-                const image = new Image();
-                image.onload = resolve;
-                image.onerror = reject;
-                image.src = img.src;
-            });
-        }));
+        images.forEach(img => {
+            const image = new Image();
+            image.src = img.src;
+        });
     }
 
     function showImage(index) {
@@ -48,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             isTransitioning = false;
-        }, 1250);
+        }, 500);
 
         imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -113,3 +109,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
+
+    // Mobile menu functionality
+    const menuToggle = document.getElementById('menuToggle');
+    const menuList = document.getElementById('menuList');
+    const closeMenu = document.getElementById('closeMenu');
+
+    menuToggle.addEventListener('click', () => {
+        menuList.classList.toggle('show');
+        closeMenu.classList.toggle('show');
+    });
+
+    closeMenu.addEventListener('click', () => {
+        menuList.classList.remove('show');
+        closeMenu.classList.remove('show');
+    });
+
+    // Enable or disable scrolling based on cursor position
+    document.addEventListener('mousemove', function(event) {
+        if (event.clientX > 245) {
+            scrollingEnabled = true;
+            imageContainer.classList.add('scroll-snap');
+        } else {
+            scrollingEnabled = false;
+            imageContainer.classList.remove('scroll-snap');
+        }
+    });
+
+    // Preload images and show the first image
+    preloadImages(images);
+    
+    // Ensure we start with the first image (image10)
+    window.scrollTo(0, 0);
+    showImage(0);
+
+    // Fallback to ensure the first image is displayed even on mobile
+    setTimeout(() => {
+        if (!imagesElements[0].classList.contains('active')) {
+            showImage(0);
+        }
+    }, 100);
+});
