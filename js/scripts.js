@@ -13,12 +13,24 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'images/image20.jpg', orientation: 'landscape' }
     ];
 
-    let currentIndex = 0; // Start with image10 (index 0)
+    let currentIndex = 0;
     let isTransitioning = false;
     let scrollingEnabled = true;
+    let isScrollLocked = false;
 
     const imageContainer = document.querySelector('.image-container');
     const imagesElements = imageContainer.querySelectorAll('.image');
+
+    function preloadImages(images) {
+        return Promise.all(images.map(img => {
+            return new Promise((resolve, reject) => {
+                const image = new Image();
+                image.onload = resolve;
+                image.onerror = reject;
+                image.src = img.src;
+            });
+        }));
+    }
 
     function showImage(index) {
         if (isTransitioning) return;
@@ -36,15 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             isTransitioning = false;
-        }, 1250); // Match this timeout with the CSS transition duration (1250ms)
+        }, 1250);
 
-        // Scroll the current image into view
         imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function nextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
+        if (currentIndex < images.length - 1) {
+            currentIndex++;
+            showImage(currentIndex);
+        }
     }
 
     function previousImage() {
@@ -52,22 +65,32 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex--;
             showImage(currentIndex);
         } else {
-            isTransitioning = false; // Reset flag if no more images to go back
+            isTransitioning = false;
         }
     }
 
-    // Scroll functionality for desktop
-    function handleScroll(event) {
-        if (window.innerWidth > 600 && scrollingEnabled && !isTransitioning) {
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
+    const debouncedHandleScroll = debounce((event) => {
+        if (window.innerWidth > 600 && scrollingEnabled && !isTransitioning && !isScrollLocked) {
+            isScrollLocked = true;
             if (event.deltaY > 0) {
                 nextImage();
             } else if (event.deltaY < 0) {
                 previousImage();
             }
+            setTimeout(() => { isScrollLocked = false; }, 1000);
         }
-    }
+    }, 50);
 
-    // Swipe functionality for mobile
+    window.addEventListener('wheel', debouncedHandleScroll);
+
     let initialTouchPos = null;
 
     function handleTouchStart(event) {
@@ -86,39 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             previousImage();
         }
 
-        initialTouchPos = null; // Reset the touch position after handling
+        initialTouchPos = null;
     }
 
-    window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-
-    // Initial display
-    showImage(currentIndex);
-
-    // Menu toggle functionality
-    const menuToggle = document.getElementById('menuToggle');
-    const menuList = document.getElementById('menuList');
-    const closeMenu = document.getElementById('closeMenu');
-
-    menuToggle.addEventListener('click', () => {
-        menuList.classList.toggle('show');
-        closeMenu.classList.toggle('show');
-    });
-
-    closeMenu.addEventListener('click', () => {
-        menuList.classList.remove('show');
-        closeMenu.classList.remove('show');
-    });
-
-    // Enable or disable scrolling based on cursor position
-    document.addEventListener('mousemove', function(event) {
-        if (event.clientX > 245) { // Cursor is over the image gallery
-            scrollingEnabled = true;
-            imageContainer.classList.add('scroll-snap');
-        } else { // Cursor is not over the image gallery
-            scrollingEnabled = false;
-            imageContainer.classList.remove('scroll-snap');
-        }
-    });
-});
