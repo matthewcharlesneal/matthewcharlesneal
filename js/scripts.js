@@ -34,21 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Preload the next image
-        if (index < images.length - 1) {
-            const nextImage = new Image();
-            nextImage.src = images[index + 1].src;
-        }
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 1250);
 
-        // Use requestAnimationFrame for smoother scrolling
-        requestAnimationFrame(() => {
-            imagesElements[index].scrollIntoView({ behavior: "auto", block: "start" });
-            
-            // Set a timeout to allow for any final rendering
-            setTimeout(() => {
-                isTransitioning = false;
-            }, 100);
-        });
+        imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function nextImage() {
@@ -124,25 +114,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize the gallery
+    // Force start at image10 (index 0)
     function initializeGallery() {
         currentIndex = 0;
         showImage(currentIndex);
         
-        // Preload all images
-        images.forEach((image, index) => {
-            if (index > 0) {  // Skip the first image as it's already loaded
-                const img = new Image();
-                img.src = image.src;
-            }
-        });
-
         // Ensure the first image is fully loaded before scrolling
         imagesElements[0].addEventListener('load', () => {
-            requestAnimationFrame(() => {
+            setTimeout(() => {
                 window.scrollTo(0, 0);
                 imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
-            });
+            }, 100);
         }, { once: true });
     }
 
