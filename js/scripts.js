@@ -90,8 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
-    showImage(currentIndex);
-
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
     const closeMenu = document.getElementById('closeMenu');
@@ -116,15 +114,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Add one-time automatic refresh for mobile devices
-    if (window.innerWidth <= 600) {
-        if (!localStorage.getItem('pageRefreshed')) {
-            localStorage.setItem('pageRefreshed', 'true');
+    // Force start at image10 (index 0)
+    function initializeGallery() {
+        currentIndex = 0;
+        showImage(currentIndex);
+        
+        // Ensure the first image is fully loaded before scrolling
+        imagesElements[0].addEventListener('load', () => {
             setTimeout(() => {
-                location.reload();
+                window.scrollTo(0, 0);
+                imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
             }, 100);
-        } else {
-            localStorage.removeItem('pageRefreshed');
-        }
+        }, { once: true });
     }
+
+    // Initialize the gallery
+    initializeGallery();
 });
