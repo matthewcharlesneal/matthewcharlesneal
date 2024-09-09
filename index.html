@@ -1,16 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Gallery</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Matthew Charles Neal - Photography Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="loading-screen"></div>
+    <div id="loading-screen" class="loading-screen"></div>
+    
     <div class="menu">
         <h1>Matthew Charles Neal</h1>
-        <div class="menu-toggle" id="menuToggle">Menu</div>
+        <div class="menu-toggle" id="menuToggle">
+            <div class="hamburger"></div>
+        </div>
+        <div class="close-menu" id="closeMenu">&times;</div>
         <ul id="menuList">
             <li><a href="sailing.html">Sailing Documentation</a></li>
             <li><a href="#unga2023">UN General Assembly 2023</a></li>
@@ -20,7 +25,21 @@
             &copy; 2024 Matthew Charles Neal. All rights reserved.
         </footer>
     </div>
-    <div class="image-container" id="imageContainer"></div>
-    <script src="script.js"></script>
+
+    <div class="image-container">
+        <div class="image portrait" data-src="images/image10.jpg"></div>
+        <div class="image portrait" data-src="images/image11.jpg"></div>
+        <div class="image portrait" data-src="images/image12.jpg"></div>
+        <div class="image portrait" data-src="images/image13.jpg"></div>
+        <div class="image portrait" data-src="images/image14.jpg"></div>
+        <div class="image landscape" data-src="images/image15.jpg"></div>
+        <div class="image landscape" data-src="images/image16.jpg"></div>
+        <div class="image landscape" data-src="images/image17.jpg"></div>
+        <div class="image landscape" data-src="images/image18.jpg"></div>
+        <div class="image landscape" data-src="images/image19.jpg"></div>
+        <div class="image landscape" data-src="images/image20.jpg"></div>
+    </div>
+
+    <script src="js/scripts.js"></script>
 </body>
 </html>
