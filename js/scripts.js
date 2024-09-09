@@ -1,44 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const images = Array.from(document.querySelectorAll('.image'));
-    const imageContainer = document.querySelector('.image-container');
-    const loadingScreen = document.getElementById('loading-screen');
+    const images = [
+        { src: 'images/image10.jpg', orientation: 'portrait' },
+        { src: 'images/image11.jpg', orientation: 'portrait' },
+        { src: 'images/image12.jpg', orientation: 'portrait' },
+        { src: 'images/image13.jpg', orientation: 'portrait' },
+        { src: 'images/image14.jpg', orientation: 'portrait' },
+        { src: 'images/image15.jpg', orientation: 'landscape' },
+        { src: 'images/image16.jpg', orientation: 'landscape' },
+        { src: 'images/image17.jpg', orientation: 'landscape' },
+        { src: 'images/image18.jpg', orientation: 'landscape' },
+        { src: 'images/image19.jpg', orientation: 'landscape' },
+        { src: 'images/image20.jpg', orientation: 'landscape' }
+    ];
+
     let currentIndex = 0;
     let isTransitioning = false;
+    let scrollingEnabled = true;
 
-    // Preload images
-    function preloadImages() {
-        const imagePromises = images.map(img => {
-            return new Promise((resolve, reject) => {
-                const imgSrc = img.getAttribute('data-src');
-                const image = new Image();
-                image.onload = resolve;
-                image.onerror = reject;
-                image.src = imgSrc;
-            });
-        });
-
-        return Promise.all(imagePromises);
-    }
-
-    // Initialize gallery
-    function initGallery() {
-        preloadImages().then(() => {
-            loadingScreen.style.display = 'none';
-            images.forEach(img => {
-                img.style.backgroundImage = `url(${img.getAttribute('data-src')})`;
-            });
-            showImage(currentIndex);
-        }).catch(error => {
-            console.error('Error loading images:', error);
-            loadingScreen.style.display = 'none';
-        });
-    }
+    const imageContainer = document.querySelector('.image-container');
+    const imagesElements = imageContainer.querySelectorAll('.image');
 
     function showImage(index) {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        images.forEach((img, i) => {
+        imagesElements.forEach((img, i) => {
             if (i === index) {
                 img.classList.add('active');
                 img.classList.remove('inactive');
@@ -48,11 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        images[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
-
         setTimeout(() => {
             isTransitioning = false;
-        }, 500);
+        }, 1250);
+
+        imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function nextImage() {
@@ -69,57 +55,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Debounce function
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    // Scroll event handler
-    const handleScroll = debounce((event) => {
-        if (!isTransitioning) {
+    function handleScroll(event) {
+        if (window.innerWidth > 600 && scrollingEnabled && !isTransitioning) {
             if (event.deltaY > 0 && currentIndex < images.length - 1) {
                 nextImage();
             } else if (event.deltaY < 0 && currentIndex > 0) {
                 previousImage();
             }
         }
-    }, 100);
-
-    // Touch event handlers
-    let touchStartY = 0;
-    let touchEndY = 0;
-
-    function handleTouchStart(e) {
-        touchStartY = e.touches[0].clientY;
     }
 
-    function handleTouchEnd(e) {
-        touchEndY = e.changedTouches[0].clientY;
-        const touchDiff = touchStartY - touchEndY;
+    let initialTouchPos = null;
 
-        if (Math.abs(touchDiff) > 50) { // Threshold for swipe
-            if (touchDiff > 0 && currentIndex < images.length - 1) {
-                nextImage();
-            } else if (touchDiff < 0 && currentIndex > 0) {
-                previousImage();
-            }
+    function handleTouchStart(event) {
+        initialTouchPos = event.touches[0].clientY;
+    }
+
+    function handleTouchMove(event) {
+        if (isTransitioning || initialTouchPos === null) return;
+
+        const currentTouchPos = event.touches[0].clientY;
+        const touchDelta = initialTouchPos - currentTouchPos;
+
+        if (touchDelta > 20 && currentIndex < images.length - 1) {
+            nextImage();
+        } else if (touchDelta < -20 && currentIndex > 0) {
+            previousImage();
         }
+
+        initialTouchPos = null;
     }
 
-    // Event listeners
-    window.addEventListener('wheel', handleScroll, { passive: true });
-    imageContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
-    imageContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('wheel', handleScroll);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
 
-    // Menu toggle functionality
+    showImage(currentIndex);
+
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
     const closeMenu = document.getElementById('closeMenu');
@@ -134,6 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
         closeMenu.classList.remove('show');
     });
 
-    // Initialize the gallery
-    initGallery();
+    document.addEventListener('mousemove', function(event) {
+        if (event.clientX > 245) {
+            scrollingEnabled = true;
+            imageContainer.classList.add('scroll-snap');
+        } else {
+            scrollingEnabled = false;
+            imageContainer.classList.remove('scroll-snap');
+        }
+    });
 });
