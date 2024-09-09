@@ -26,19 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        imagesElements.forEach((img, i) => {
-            if (i === index) {
-                img.style.display = 'block';
-            } else {
-                img.style.display = 'none';
-            }
-        });
+        imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
 
         setTimeout(() => {
             isTransitioning = false;
-        }, 100);
-
-        imagesElements[index].scrollIntoView({ behavior: "auto", block: "start" });
+        }, 1000);
     }
 
     function nextImage() {
@@ -66,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const debouncedHandleScroll = debounce((event) => {
-        if (window.innerWidth > 600 && scrollingEnabled && !isTransitioning && !isScrollLocked) {
+        if (scrollingEnabled && !isTransitioning && !isScrollLocked) {
             isScrollLocked = true;
             if (event.deltaY > 0) {
                 nextImage();
@@ -79,29 +71,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('wheel', debouncedHandleScroll);
 
-    let initialTouchPos = null;
+    let touchStartY = 0;
+    let touchEndY = 0;
 
     function handleTouchStart(event) {
-        initialTouchPos = event.touches[0].clientY;
+        touchStartY = event.touches[0].clientY;
     }
 
     function handleTouchMove(event) {
-        if (isTransitioning || initialTouchPos === null || !scrollingEnabled) return;
+        touchEndY = event.touches[0].clientY;
+    }
 
-        const currentTouchPos = event.touches[0].clientY;
-        const touchDelta = initialTouchPos - currentTouchPos;
+    function handleTouchEnd() {
+        if (isTransitioning || !scrollingEnabled) return;
 
-        if (touchDelta > 20) {
+        const touchDelta = touchStartY - touchEndY;
+
+        if (touchDelta > 50) {
             nextImage();
-        } else if (touchDelta < -20) {
+        } else if (touchDelta < -50) {
             previousImage();
         }
 
-        initialTouchPos = null;
+        touchStartY = 0;
+        touchEndY = 0;
     }
 
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
+    imageContainer.addEventListener('touchstart', handleTouchStart, false);
+    imageContainer.addEventListener('touchmove', handleTouchMove, false);
+    imageContainer.addEventListener('touchend', handleTouchEnd, false);
 
     // Mobile menu functionality
     const menuToggle = document.getElementById('menuToggle');
@@ -139,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollingEnabled = true;
     }).catch(error => {
         console.error('Error loading images:', error);
-        loadingScreen.textContent = 'Error loading images. Please refresh the page.';
     });
 
     // Ensure we start with the first image (image10)
