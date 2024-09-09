@@ -79,18 +79,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (touchDelta > 20 && currentIndex < images.length - 1) {
             nextImage();
+            initialTouchPos = null;
         } else if (touchDelta < -20 && currentIndex > 0) {
             previousImage();
+            initialTouchPos = null;
         }
+    }
 
+    function handleTouchEnd() {
         initialTouchPos = null;
     }
 
     window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchend', handleTouchEnd);
 
+    // Ensure the gallery starts at the first image
     showImage(currentIndex);
+
+    // Scroll to the first image on page load for mobile devices
+    if (window.innerWidth <= 600) {
+        setTimeout(() => {
+            imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
+        }, 100);
+    }
 
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
