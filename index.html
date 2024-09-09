@@ -3,30 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Image Gallery</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Image Gallery</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="gallery-container">
-        <div class="image-container" id="imageContainer">
-            <img src="images/image10.jpg" alt="Image 10" class="image">
-            <img src="images/image11.jpg" alt="Image 11" class="image">
-            <img src="images/image12.jpg" alt="Image 12" class="image">
-            <img src="images/image13.jpg" alt="Image 13" class="image">
-            <img src="images/image14.jpg" alt="Image 14" class="image">
-            <img src="images/image15.jpg" alt="Image 15" class="image">
-            <img src="images/image16.jpg" alt="Image 16" class="image">
-            <img src="images/image17.jpg" alt="Image 17" class="image">
-            <img src="images/image18.jpg" alt="Image 18" class="image">
-            <img src="images/image19.jpg" alt="Image 19" class="image">
-            <img src="images/image20.jpg" alt="Image 20" class="image">
+<body style="cursor: none;">
+    <div class="menu">
+        <h1>Matthew Charles Neal</h1>
+        <div class="menu-toggle" id="menuToggle">
+            <div class="hamburger"></div>
         </div>
+        <div class="close-menu" id="closeMenu">&times;</div>
+        <ul id="menuList">
+            <li><a href="sailing.html">Sailing Documentation</a></li>
+            <li><a href="#unga2023">UN General Assembly 2023</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <footer class="footer">
+            &copy; 2024 Matthew Charles Neal. All rights reserved.
+        </footer>
     </div>
-    <div id="menuToggle">Menu</div>
-    <div id="closeMenu">Close</div>
-    <ul id="menuList">
-        <!-- Add menu items here -->
-    </ul>
-    <script src="js/gallery.js"></script>
+    <div class="image-container">
+        <div class="image portrait" style="background-image: url('images/image10.jpg');"></div>
+        <div class="image portrait" style="background-image: url('images/image11.jpg');"></div>
+        <div class="image portrait" style="background-image: url('images/image12.jpg');"></div>
+        <div class="image portrait" style="background-image: url('images/image13.jpg');"></div>
+        <div class="image portrait" style="background-image: url('images/image14.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/image15.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/image16.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/image17.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/image18.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/image19.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/image20.jpg');"></div>
+    </div>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
