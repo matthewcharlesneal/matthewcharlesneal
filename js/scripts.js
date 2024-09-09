@@ -116,10 +116,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Add automatic refresh for mobile devices
+    // Add one-time automatic refresh for mobile devices
     if (window.innerWidth <= 600) {
-        setTimeout(() => {
-            location.reload();
-        }, 100);
+        if (!localStorage.getItem('pageRefreshed')) {
+            localStorage.setItem('pageRefreshed', 'true');
+            setTimeout(() => {
+                location.reload();
+            }, 100);
+        } else {
+            localStorage.removeItem('pageRefreshed');
+        }
     }
 });
