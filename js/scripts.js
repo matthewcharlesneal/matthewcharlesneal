@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isTransitioning = false;
         }, 1250);
 
-        imagesElements[index].scrollIntoView({ behavior: "auto", block: "start" });
+        imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function nextImage() {
@@ -86,29 +86,31 @@ document.addEventListener('DOMContentLoaded', () => {
         initialTouchPos = null;
     }
 
-    function initializeGallery() {
-        currentIndex = 0;
-        showImage(currentIndex);
-        
-        // Force layout recalculation
-        imageContainer.offsetHeight;
-
-        // Scroll to the first image after a short delay
-        setTimeout(() => {
-            imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
-        }, 100);
-    }
-
     window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
-    // Initialize the gallery
-    initializeGallery();
+    // New function to ensure the gallery starts at image10
+    function initializeGalleryPosition() {
+        // Reset scroll position to top
+        imageContainer.scrollTop = 0;
+        
+        // Force browser to recognize the scroll change
+        setTimeout(() => {
+            // Ensure smooth scrolling is disabled for initial positioning
+            imageContainer.style.scrollBehavior = 'auto';
+            showImage(0);
+            // Re-enable smooth scrolling after initial positioning
+            setTimeout(() => {
+                imageContainer.style.scrollBehavior = '';
+            }, 50);
+        }, 0);
+    }
 
-    // Re-initialize on orientation change
-    window.addEventListener('orientationchange', initializeGallery);
+    // Call the initialization function when the page loads
+    initializeGalleryPosition();
 
+    // Existing code for menu toggle and mouse move...
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
     const closeMenu = document.getElementById('closeMenu');
