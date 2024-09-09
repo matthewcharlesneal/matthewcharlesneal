@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isTransitioning = false;
         }, 1250);
 
-        imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
+        imagesElements[index].scrollIntoView({ behavior: "auto", block: "start" });
     }
 
     function nextImage() {
@@ -86,11 +86,28 @@ document.addEventListener('DOMContentLoaded', () => {
         initialTouchPos = null;
     }
 
+    function initializeGallery() {
+        currentIndex = 0;
+        showImage(currentIndex);
+        
+        // Force layout recalculation
+        imageContainer.offsetHeight;
+
+        // Scroll to the first image after a short delay
+        setTimeout(() => {
+            imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
+        }, 100);
+    }
+
     window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
-    showImage(currentIndex);
+    // Initialize the gallery
+    initializeGallery();
+
+    // Re-initialize on orientation change
+    window.addEventListener('orientationchange', initializeGallery);
 
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
