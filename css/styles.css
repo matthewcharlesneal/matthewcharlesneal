@@ -9,11 +9,18 @@ body, html {
     font-family: 'EB Garamond', serif;
 }
 
-body {
+/* Loading screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: flex-start;
 }
 
 /* Menu styles */
@@ -60,7 +67,7 @@ body {
 .image-container {
     margin-left: 245px;
     width: calc(100% - 245px);
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
@@ -82,22 +89,8 @@ body {
     background-repeat: no-repeat;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
     opacity: 1;
-}
-
-/* Loading screen */
-.loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 /* Footer styles */
@@ -114,48 +107,143 @@ body {
 
 /* Mobile styles */
 @media (max-width: 600px) {
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100vh;
+        overflow: hidden;
+        text-align: center;
+        width: 100%;
+    }
+
     .menu {
         width: 100%;
         height: auto;
-        padding: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background-color: #fff;
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px 20px;
     }
 
     .menu h1 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        font-size: 12px;
         text-align: center;
     }
 
     .menu-toggle {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
+        width: 30px;
+        height: 30px;
+    }
+
+    .menu-toggle .hamburger {
+        width: 20px;
+        height: 2px;
+        background-color: #333;
+        position: relative;
+        transition: all 0.3s;
+    }
+
+    .menu-toggle .hamburger::before,
+    .menu-toggle .hamburger::after {
+        content: '';
+        width: 20px;
+        height: 2px;
+        background-color: #333;
+        position: absolute;
+        left: 0;
+        transition: all 0.3s;
+    }
+
+    .menu-toggle .hamburger::before {
+        top: -6px;
+    }
+
+    .menu-toggle .hamburger::after {
+        top: 6px;
+    }
+
+    .close-menu {
+        display: none;
+        font-size: 30px;
+        cursor: pointer;
+        position: fixed;
+        top: 3.0px;
+        right: 26.15px;
+        color: black;
+        z-index: 1001;
     }
 
     .menu ul {
         display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #acacad;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
     }
 
     .menu ul.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .close-menu.show {
         display: block;
     }
 
     .image-container {
         margin-left: 0;
         width: 100%;
-        height: 100vh;
+        height: calc(100vh - 40px);
+        position: absolute;
+        top: 40px;
+        left: 0;
+    }
+
+    .image {
+        flex: 0 0 100vh;
+        width: 100%;
+        height: calc(100vh - 40px);
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    .image {
-        max-height: 100vh;
-        width: auto;
-        max-width: 100%;
-    }
-
     .footer {
         text-align: center;
+        width: 100%;
+        position: fixed;
         bottom: 15px;
         left: 0;
         right: 0;
+    }
+}
+
+/* Ensure proper display on larger screens */
+@media (min-width: 601px) {
+    .close-menu {
+        display: none !important;
     }
 }
