@@ -1,54 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const images = [
-        { src: 'images/image10.jpg', orientation: 'portrait' },
-        { src: 'images/image11.jpg', orientation: 'portrait' },
-        { src: 'images/image12.jpg', orientation: 'portrait' },
-        { src: 'images/image13.jpg', orientation: 'portrait' },
-        { src: 'images/image14.jpg', orientation: 'portrait' },
-        { src: 'images/image15.jpg', orientation: 'landscape' },
-        { src: 'images/image16.jpg', orientation: 'landscape' },
-        { src: 'images/image17.jpg', orientation: 'landscape' },
-        { src: 'images/image18.jpg', orientation: 'landscape' },
-        { src: 'images/image19.jpg', orientation: 'landscape' },
-        { src: 'images/image20.jpg', orientation: 'landscape' }
-    ];
-
+    const images = Array.from(document.querySelectorAll('.image'));
+    const imageContainer = document.querySelector('.image-container');
+    const loadingScreen = document.getElementById('loading-screen');
     let currentIndex = 0;
     let isTransitioning = false;
-    const imageContainer = document.getElementById('imageContainer');
-    const loadingScreen = document.querySelector('.loading-screen');
 
     // Preload images
     function preloadImages() {
-        const imagePromises = images.map(image => {
+        const imagePromises = images.map(img => {
             return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = resolve;
-                img.onerror = reject;
-                img.src = image.src;
+                const imgSrc = img.getAttribute('data-src');
+                const image = new Image();
+                image.onload = resolve;
+                image.onerror = reject;
+                image.src = imgSrc;
             });
         });
 
         return Promise.all(imagePromises);
     }
 
-    // Create image elements
-    function createImageElements() {
-        images.forEach((image, index) => {
-            const div = document.createElement('div');
-            div.className = `image ${image.orientation}`;
-            div.style.backgroundImage = `url('${image.src}')`;
-            imageContainer.appendChild(div);
+    // Initialize gallery
+    function initGallery() {
+        preloadImages().then(() => {
+            loadingScreen.style.display = 'none';
+            images.forEach(img => {
+                img.style.backgroundImage = `url(${img.getAttribute('data-src')})`;
+            });
+            showImage(currentIndex);
+        }).catch(error => {
+            console.error('Error loading images:', error);
+            loadingScreen.style.display = 'none';
         });
     }
 
-    // Show image
     function showImage(index) {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        const imageElements = imageContainer.querySelectorAll('.image');
-        imageElements.forEach((img, i) => {
+        images.forEach((img, i) => {
             if (i === index) {
                 img.classList.add('active');
                 img.classList.remove('inactive');
@@ -58,14 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        imageElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
+        images[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         setTimeout(() => {
             isTransitioning = false;
-        }, 1250);
+        }, 500);
     }
 
-    // Next image
     function nextImage() {
         if (currentIndex < images.length - 1) {
             currentIndex++;
@@ -73,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Previous image
     function previousImage() {
         if (currentIndex > 0) {
             currentIndex--;
@@ -94,55 +82,58 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Handle scroll
+    // Scroll event handler
     const handleScroll = debounce((event) => {
         if (!isTransitioning) {
-            if (event.deltaY > 0) {
+            if (event.deltaY > 0 && currentIndex < images.length - 1) {
                 nextImage();
-            } else if (event.deltaY < 0) {
+            } else if (event.deltaY < 0 && currentIndex > 0) {
                 previousImage();
             }
         }
-    }, 200);
+    }, 100);
 
-    // Handle touch
+    // Touch event handlers
     let touchStartY = 0;
     let touchEndY = 0;
 
-    function handleTouchStart(event) {
-        touchStartY = event.touches[0].clientY;
+    function handleTouchStart(e) {
+        touchStartY = e.touches[0].clientY;
     }
 
-    function handleTouchEnd(event) {
-        touchEndY = event.changedTouches[0].clientY;
-        const diff = touchStartY - touchEndY;
+    function handleTouchEnd(e) {
+        touchEndY = e.changedTouches[0].clientY;
+        const touchDiff = touchStartY - touchEndY;
 
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) {
+        if (Math.abs(touchDiff) > 50) { // Threshold for swipe
+            if (touchDiff > 0 && currentIndex < images.length - 1) {
                 nextImage();
-            } else {
+            } else if (touchDiff < 0 && currentIndex > 0) {
                 previousImage();
             }
         }
     }
 
-    // Initialize gallery
-    preloadImages().then(() => {
-        createImageElements();
-        showImage(currentIndex);
-        loadingScreen.style.display = 'none';
+    // Event listeners
+    window.addEventListener('wheel', handleScroll, { passive: true });
+    imageContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+    imageContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-        // Event listeners
-        window.addEventListener('wheel', handleScroll, { passive: true });
-        imageContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
-        imageContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
-    });
-
-    // Mobile menu toggle
+    // Menu toggle functionality
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
+    const closeMenu = document.getElementById('closeMenu');
 
     menuToggle.addEventListener('click', () => {
         menuList.classList.toggle('show');
+        closeMenu.classList.toggle('show');
     });
+
+    closeMenu.addEventListener('click', () => {
+        menuList.classList.remove('show');
+        closeMenu.classList.remove('show');
+    });
+
+    // Initialize the gallery
+    initGallery();
 });
