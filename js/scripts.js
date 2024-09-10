@@ -119,15 +119,24 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIndex = 0;
         showImage(currentIndex);
         
-        // Ensure the first image is fully loaded before scrolling
-        imagesElements[0].addEventListener('load', () => {
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-                imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
-            }, 100);
-        }, { once: true });
+        // Ensure all images are loaded before scrolling
+        Promise.all(Array.from(imagesElements).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => img.addEventListener('load', resolve));
+        })).then(() => {
+            window.scrollTo(0, 0);
+            imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
+        });
     }
 
     // Initialize the gallery
     initializeGallery();
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+            showImage(currentIndex);
+        }, 100);
+    });
 });
