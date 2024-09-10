@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const images = [
+        { src: 'images/image2.jpg', orientation: 'landscape' },
         { src: 'images/image10.jpg', orientation: 'portrait' },
         { src: 'images/image11.jpg', orientation: 'portrait' },
         { src: 'images/image12.jpg', orientation: 'portrait' },
