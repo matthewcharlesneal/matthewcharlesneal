@@ -1,8 +1,3 @@
-// Disable automatic scroll restoration
-if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const images = [
         { src: 'images/image10.jpg', orientation: 'portrait' },
@@ -43,21 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isTransitioning = false;
         }, 1250);
 
-        scrollToImage(index);
-    }
-
-    function scrollToImage(index) {
-        const targetImage = imagesElements[index];
-        const targetRect = targetImage.getBoundingClientRect();
-        const targetTop = window.pageYOffset + targetRect.top;
-
-        window.scrollTo({
-            top: targetTop,
-            behavior: 'smooth'
-        });
-
-        // Force reflow to ensure scroll completes
-        void targetImage.offsetWidth;
+        imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function nextImage() {
@@ -105,78 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
         initialTouchPos = null;
     }
 
-    function initializeGallery() {
-        currentIndex = 0;
-        showImage(currentIndex);
-        
-        // Ensure all images are loaded before scrolling
-        Promise.all(Array.from(imagesElements).map(img => {
-            if (img.complete) return Promise.resolve();
-            return new Promise(resolve => img.addEventListener('load', resolve));
-        })).then(() => {
-            forceInitialPosition();
-        });
-    }
-
-    function forceInitialPosition() {
-        // Reset scroll position
-        window.scrollTo(0, 0);
-
-        // Force browser to recognize new scroll position
-        void document.documentElement.offsetHeight;
-
-        // Scroll to first image
-        scrollToImage(0);
-
-        // Additional measures for mobile Safari
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-            scrollToImage(0);
-        }, 100);
-
-        // Final check after a longer delay
-        setTimeout(() => {
-            if (window.pageYOffset !== 0) {
-                window.scrollTo(0, 0);
-                scrollToImage(0);
-            }
-        }, 500);
-    }
-
-    // Event Listeners
     window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
-
-    window.addEventListener('pageshow', (event) => {
-        if (event.persisted) {
-            // Page is loaded from bfcache
-            forceInitialPosition();
-        }
-    });
-
-    window.addEventListener('load', () => {
-        // Ensure correct position after all resources are loaded
-        forceInitialPosition();
-    });
-
-    window.addEventListener('orientationchange', () => {
-        setTimeout(forceInitialPosition, 100);
-    });
-
-    window.addEventListener('resize', () => {
-        scrollToImage(currentIndex);
-    });
-
-    document.addEventListener('mousemove', function(event) {
-        if (event.clientX > 245) {
-            scrollingEnabled = true;
-            imageContainer.classList.add('scroll-snap');
-        } else {
-            scrollingEnabled = false;
-            imageContainer.classList.remove('scroll-snap');
-        }
-    });
 
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
@@ -192,6 +104,52 @@ document.addEventListener('DOMContentLoaded', () => {
         closeMenu.classList.remove('show');
     });
 
+    document.addEventListener('mousemove', function(event) {
+        if (event.clientX > 245) {
+            scrollingEnabled = true;
+            imageContainer.classList.add('scroll-snap');
+        } else {
+            scrollingEnabled = false;
+            imageContainer.classList.remove('scroll-snap');
+        }
+    });
+
+    // Force start at image10 (index 0)
+    function initializeGallery() {
+        currentIndex = 0;
+        
+        // Add initial hidden state
+        imageContainer.style.opacity = '0';
+        imageContainer.style.transition = 'opacity 0.5s ease-in-out';
+        
+        // Ensure all images are loaded before scrolling
+        Promise.all(Array.from(imagesElements).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => img.addEventListener('load', resolve));
+        })).then(() => {
+            window.scrollTo(0, 0);
+            
+            // Delay the scroll and fade-in
+            setTimeout(() => {
+                imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
+                showImage(currentIndex);
+                
+                // Fade in the image container
+                setTimeout(() => {
+                    imageContainer.style.opacity = '1';
+                }, 100);
+            }, 300);
+        });
+    }
+
     // Initialize the gallery
     initializeGallery();
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+            showImage(currentIndex);
+        }, 100);
+    });
 });
