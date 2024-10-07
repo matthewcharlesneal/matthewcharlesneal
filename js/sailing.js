@@ -1,84 +1,150 @@
 document.addEventListener('DOMContentLoaded', () => {
     const images = [
-        { src: 'images/image5.jpg', orientation: 'landscape', label: 'Marblehead to Halifax Ocean Race 2023' },
-        { src: 'images/image4.jpg', orientation: 'portrait', label: 'Block Island Race Week 2023' },
-        { src: 'images/image9.jpg', orientation: 'portrait', label: 'Marblehead to Halifax Ocean Race 2023' },
-	{ src: 'images/image10.jpg', orientation: 'landscape', label: 'Marblehead to Halifax Ocean Race 2023' },
-	{ src: 'images/image28.jpg', orientation: 'landscape', label: 'Newport to Bermuda Race 2024' },
-	{ src: 'images/image29.jpg', orientation: 'landscape', label: 'Newport to Bermuda Race 2024' },
-        // Add more images as needed
+        { src: 'images/sailing1.jpg', orientation: 'landscape' },
+        { src: 'images/sailing2.jpg', orientation: 'landscape' },
+        { src: 'images/sailing3.jpg', orientation: 'landscape' },
+        { src: 'images/sailing4.jpg', orientation: 'portrait' },
+        { src: 'images/sailing5.jpg', orientation: 'landscape' },
     ];
+
     let currentIndex = 0;
+    let isTransitioning = false;
+    let scrollingEnabled = true;
 
-    const galleryImage = document.getElementById('galleryImage');
-    const imageLabel = document.getElementById('imageLabel');
-    const body = document.body;
-    const menuLinks = document.querySelectorAll('.menu ul li a, .menu h1 a'); // Include h1 a
-
-    const cursor = document.createElement('div');
-    cursor.classList.add('cursor');
-    body.appendChild(cursor);
+    const imageContainer = document.querySelector('.image-container');
+    const imagesElements = imageContainer.querySelectorAll('.image');
 
     function showImage(index) {
-        galleryImage.src = images[index].src;
-        imageLabel.textContent = images[index].label; // Update the label text
-    }
+        if (isTransitioning) return;
+        isTransitioning = true;
 
-    function nextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
-    }
-
-    function previousImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
-    }
-
-    document.addEventListener('mousemove', (event) => {
-        cursor.style.left = `${event.pageX}px`;
-        cursor.style.top = `${event.pageY}px`;
-
-        if (event.pageX < window.innerWidth / 2) {
-            cursor.classList.add('left');
-            cursor.classList.remove('right');
-        } else {
-            cursor.classList.add('right');
-            cursor.classList.remove('left');
-        }
-
-        // Check if the mouse is over a menu link or the name link
-        let overMenuLink = false;
-        menuLinks.forEach(link => {
-            const rect = link.getBoundingClientRect();
-            if (event.clientX >= rect.left && event.clientX <= rect.right &&
-                event.clientY >= rect.top && event.clientY <= rect.bottom) {
-                overMenuLink = true;
+        imagesElements.forEach((img, i) => {
+            if (i === index) {
+                img.classList.add('active');
+                img.classList.remove('inactive');
+            } else {
+                img.classList.remove('active');
+                img.classList.add('inactive');
             }
         });
 
-        if (overMenuLink) {
-            cursor.style.display = 'none';
-        } else {
-            cursor.style.display = 'block';
-        }
-    });
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 1250);
 
-    document.addEventListener('click', (event) => {
-        if (event.pageX < window.innerWidth / 2) {
-            previousImage();
-        } else {
+        requestAnimationFrame(() => {
+            imagesElements[index].scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    }
+
+    function nextImage() {
+        if (currentIndex < images.length - 1) {
+            currentIndex++;
+            showImage(currentIndex);
+        }
+    }
+
+    function previousImage() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            showImage(currentIndex);
+        }
+    }
+
+    function handleScroll(event) {
+        if (window.innerWidth > 600 && scrollingEnabled && !isTransitioning) {
+            if (event.deltaY > 0 && currentIndex < images.length - 1) {
+                nextImage();
+            } else if (event.deltaY < 0 && currentIndex > 0) {
+                previousImage();
+            }
+        }
+    }
+
+    let initialTouchPos = null;
+
+    function handleTouchStart(event) {
+        initialTouchPos = event.touches[0].clientY;
+    }
+
+    function handleTouchMove(event) {
+        if (isTransitioning || initialTouchPos === null) return;
+
+        const currentTouchPos = event.touches[0].clientY;
+        const touchDelta = initialTouchPos - currentTouchPos;
+
+        if (touchDelta > 20 && currentIndex < images.length - 1) {
             nextImage();
-        }
-    });
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowRight') {
-            nextImage();
-        } else if (event.key === 'ArrowLeft') {
+        } else if (touchDelta < -20 && currentIndex > 0) {
             previousImage();
         }
+
+        initialTouchPos = null;
+    }
+
+    function initializeGallery() {
+        currentIndex = 0;
+        showImage(currentIndex);
+        
+        Promise.all(Array.from(imagesElements).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => img.addEventListener('load', resolve));
+        })).then(() => {
+            requestAnimationFrame(() => {
+                window.scrollTo(0, 0);
+                imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
+            });
+        });
+    }
+
+    function forceStartAtFirstImage() {
+        currentIndex = 0;
+        showImage(currentIndex);
+        window.scrollTo(0, 0);
+        imagesElements[0].scrollIntoView({ behavior: "auto", block: "start" });
+    }
+
+    // Event Listeners
+    window.addEventListener('wheel', handleScroll);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
+
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+            showImage(currentIndex);
+        }, 100);
     });
 
-    // Initial image display
-    showImage(currentIndex);
+    window.addEventListener('resize', forceStartAtFirstImage);
+
+    document.addEventListener('mousemove', function(event) {
+        if (event.clientX > 245) {
+            scrollingEnabled = true;
+            imageContainer.classList.add('scroll-snap');
+        } else {
+            scrollingEnabled = false;
+            imageContainer.classList.remove('scroll-snap');
+        }
+    });
+
+    const menuToggle = document.getElementById('menuToggle');
+    const menuList = document.getElementById('menuList');
+    const closeMenu = document.getElementById('closeMenu');
+
+    menuToggle.addEventListener('click', () => {
+        menuList.classList.toggle('show');
+        closeMenu.classList.toggle('show');
+    });
+
+    closeMenu.addEventListener('click', () => {
+        menuList.classList.remove('show');
+        closeMenu.classList.remove('show');
+    });
+
+    // Initialize the gallery
+    initializeGallery();
+
+    // Force start at image10 (index 0) on page load
+    forceStartAtFirstImage();
 });
