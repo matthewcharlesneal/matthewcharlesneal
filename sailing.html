@@ -5,25 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sailing Documentation</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/sailing.css"> <!-- Link to specific CSS for Sailing Documentation page -->
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body style="cursor: none;">
     <div class="menu">
-        <h1><a href="index.html" class="home-link">Matthew Charles Neal</a></h1> <!-- Link to Home -->
-        <ul>
-            <li><a href="sailing.html">Sailing Documentation</a></li>
-            <li><a href="unga2023.html">UN General Assembly 2023</a></li>
-            <li><a href="contact.html">Contact</a></li>
+        <h1>Matthew Charles Neal</h1>
+        <div class="menu-toggle" id="menuToggle">
+            <div class="hamburger"></div>
+        </div>
+        <div class="close-menu" id="closeMenu">&times;</div>
+        <ul id="menuList">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#unga2023">UN General Assembly 2023</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
-        <div id="imageLabel" class="image-label"></div> <!-- Add a div for the image label here -->
         <footer class="footer">
             &copy; 2024 Matthew Charles Neal. All rights reserved.
         </footer>
     </div>
     <div class="image-container">
-        <img id="galleryImage" src="images/image5.jpg" alt="Image 5">
+         <div class="image landscape" style="background-image: url('images/sailing1.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/sailing2.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/sailing3.jpg');"></div>
+        <div class="image portrait" style="background-image: url('images/sailing4.jpg');"></div>
+        <div class="image landscape" style="background-image: url('images/sailing5.jpg');"data-last-image="true"></div>
     </div>
-    <script src="js/sailing.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
