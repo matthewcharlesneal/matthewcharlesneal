@@ -60,66 +60,45 @@ body {
     padding: 10px 0;
 }
 
-.image-container {
-    margin-left: 245px;
-    width: calc(100% - 245px);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-    scroll-snap-type: y proximity;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-}
-
-.image-container::-webkit-scrollbar {
-    display: none;
-}
-
-.image {
-    flex: 0 0 100vh;
-    width: 100%;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out;
-    opacity: 1;
-}
-
-.image.active {
-    opacity: 1;
-}
-
-.image.inactive {
-    opacity: 1;
-}
-
-.footer {
-    font-size: 10px;
-    color: #333;
-    text-align: left;
-    position: absolute;
-    bottom: 60px;
-    left: 20px;
-    width: calc(100% - 40px);
-    white-space: nowrap;
-}
-
-/* Desktop media query */
+/* Desktop-specific container handling */
 @media (min-width: 601px) {
-    body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
-        cursor: auto;
+    .image-container {
+        margin-left: 245px;
+        width: calc(100% - 245px);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        right: 0;
+    }
+
+    .image {
+        flex: 0 0 100vh;
+        width: 100%;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        transform: translateY(0);
+        transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+        will-change: transform;
     }
 
     .image:not(:last-child) {
         margin-bottom: 30px;
+    }
+
+    .image.active {
+        opacity: 1;
+    }
+
+    .image.inactive {
+        opacity: 0.3;
+    }
+
+    body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
+        cursor: auto;
     }
 
     .close-menu {
@@ -128,7 +107,7 @@ body {
 }
 
 /* Mobile styles */
-@media only screen and (max-width: 600px) {
+@media (max-width: 600px) {
     body, .menu, h1, ul, li, a, .image-container, img, header, main {
         all: unset;
         margin: 0;
@@ -264,19 +243,17 @@ body {
     }
 
     .image-container {
+        margin-left: 0;
+        width: 100%;
+        height: calc(100vh - 40px);
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: calc(100vh - 40px);
-        width: 100%;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        scroll-snap-type: y mandatory;
-        scroll-snap-stop: always;
-        overflow-y: scroll;
-        scroll-behavior: smooth;
         scrollbar-width: none;
         -ms-overflow-style: none;
         -webkit-overflow-scrolling: touch;
@@ -284,6 +261,8 @@ body {
 
     .image {
         flex: 0 0 calc(100vh - 40px);
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 
     .image:last-child {
@@ -299,6 +278,17 @@ body {
         left: 0;
         right: 0;
     }
+}
+
+.footer {
+    font-size: 10px;
+    color: #333;
+    text-align: left;
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    width: calc(100% - 40px);
+    white-space: nowrap;
 }
 
 /* Desktop/Mobile image display */
