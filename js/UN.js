@@ -2,156 +2,121 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageContainer = document.querySelector('.image-container');
     const images = Array.from(document.querySelectorAll('.image'));
     let currentIndex = 0;
-    let isTransitioning = false;
-    let scrollingEnabled = true;
-    let lastScrollTime = Date.now();
+    let isScrolling = false;
     let scrollTimeout;
+    
+    // Simple debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
 
-    function showImage(index) {
-        if (isTransitioning) return;
-        isTransitioning = true;
+    function updateActiveImage() {
+        const containerRect = imageContainer.getBoundingClientRect();
+        const containerCenter = containerRect.top + (containerRect.height / 2);
 
-        // Cancel any pending scroll animations
-        if (scrollTimeout) {
-            clearTimeout(scrollTimeout);
-        }
+        let closestImage = images[0];
+        let closestDistance = Infinity;
 
-        images.forEach((img, i) => {
-            if (i === index) {
-                img.classList.add('active');
-                img.classList.remove('inactive');
-            } else {
-                img.classList.remove('active');
-                img.classList.add('inactive');
+        images.forEach((image) => {
+            const imageRect = image.getBoundingClientRect();
+            const imageCenter = imageRect.top + (imageRect.height / 2);
+            const distance = Math.abs(containerCenter - imageCenter);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestImage = image;
             }
         });
 
-        const targetImage = images[index];
-        const containerTop = imageContainer.getBoundingClientRect().top;
-        const targetTop = targetImage.getBoundingClientRect().top;
-        const scrollOffset = targetTop - containerTop;
-
-        imageContainer.scrollBy({
-            top: scrollOffset,
-            behavior: 'smooth'
-        });
-
-        scrollTimeout = setTimeout(() => {
-            isTransitioning = false;
-        }, 800); // Reduced from 1250ms for snappier response
-    }
-
-    function handleDesktopScroll(event) {
-        if (!scrollingEnabled || isTransitioning) return;
-        
-        const now = Date.now();
-        if (now - lastScrollTime < 50) return; // Debounce aggressive scroll events
-        lastScrollTime = now;
-
-        const direction = event.deltaY > 0 ? 1 : -1;
-        const sensitivity = 25; // Adjust this value to change scroll sensitivity
-
-        if (Math.abs(event.deltaY) < sensitivity) return;
-
-        if (direction > 0 && currentIndex < images.length - 1) {
-            event.preventDefault();
-            currentIndex++;
-            showImage(currentIndex);
-        } else if (direction < 0 && currentIndex > 0) {
-            event.preventDefault();
-            currentIndex--;
-            showImage(currentIndex);
+        const newIndex = images.indexOf(closestImage);
+        if (newIndex !== currentIndex) {
+            currentIndex = newIndex;
+            images.forEach((img, i) => {
+                if (i === currentIndex) {
+                    img.classList.add('active');
+                    img.classList.remove('inactive');
+                } else {
+                    img.classList.remove('active');
+                    img.classList.add('inactive');
+                }
+            });
         }
     }
 
-    let touchStartY = null;
+    // Optimized scroll handler
+    const handleScroll = debounce(() => {
+        if (!isScrolling) {
+            updateActiveImage();
+        }
+    }, 50);
 
-    function handleTouchStart(event) {
-        if (window.innerWidth > 600) return; // Only handle touch on mobile
-        touchStartY = event.touches[0].clientY;
+    function scrollToImage(index) {
+        if (isScrolling) return;
+        isScrolling = true;
+
+        const targetImage = images[index];
+        targetImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+            updateActiveImage();
+        }, 500);
     }
 
-    function handleTouchMove(event) {
-        if (window.innerWidth > 600 || !touchStartY || isTransitioning) return;
+    function handleWheelEvent(e) {
+        if (window.innerWidth <= 600) return;
+        
+        e.preventDefault();
+        
+        if (isScrolling) return;
 
-        const touchY = event.touches[0].clientY;
+        if (e.deltaY > 0 && currentIndex < images.length - 1) {
+            scrollToImage(currentIndex + 1);
+        } else if (e.deltaY < 0 && currentIndex > 0) {
+            scrollToImage(currentIndex - 1);
+        }
+    }
+
+    // Mobile touch handling (keeping your original mobile implementation)
+    let touchStartY = null;
+
+    function handleTouchStart(e) {
+        if (window.innerWidth > 600) return;
+        touchStartY = e.touches[0].clientY;
+    }
+
+    function handleTouchMove(e) {
+        if (window.innerWidth > 600 || !touchStartY || isScrolling) return;
+
+        const touchY = e.touches[0].clientY;
         const touchDelta = touchStartY - touchY;
 
         if (Math.abs(touchDelta) > 20) {
             if (touchDelta > 0 && currentIndex < images.length - 1) {
-                currentIndex++;
-                showImage(currentIndex);
-                touchStartY = null;
+                scrollToImage(currentIndex + 1);
             } else if (touchDelta < 0 && currentIndex > 0) {
-                currentIndex--;
-                showImage(currentIndex);
-                touchStartY = null;
+                scrollToImage(currentIndex - 1);
             }
+            touchStartY = null;
         }
     }
 
-    function initializeGallery() {
-        currentIndex = 0;
-        showImage(currentIndex);
-        
-        // Wait for all images to load
-        Promise.all(Array.from(images).map(img => {
-            const bgImage = img.style.backgroundImage;
-            if (!bgImage) return Promise.resolve();
-            
-            return new Promise(resolve => {
-                const image = new Image();
-                image.onload = resolve;
-                image.src = bgImage.replace(/url\(['"]?(.*?)['"]?\)/, '$1');
-            });
-        })).then(() => {
-            requestAnimationFrame(() => {
-                window.scrollTo(0, 0);
-                images[0].scrollIntoView({ behavior: "auto", block: "start" });
-            });
-        });
-    }
-
-    // Intersection Observer for backup scroll detection
-    const observer = new IntersectionObserver((entries) => {
-        if (isTransitioning) return;
-        
-        entries.forEach(entry => {
-            if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                const index = images.indexOf(entry.target);
-                if (index !== currentIndex) {
-                    currentIndex = index;
-                    images.forEach((img, i) => {
-                        img.classList.toggle('active', i === index);
-                        img.classList.toggle('inactive', i !== index);
-                    });
-                }
-            }
-        });
-    }, {
-        root: imageContainer,
-        threshold: [0.5],
-        rootMargin: '-10% 0px -10% 0px'
-    });
-
-    images.forEach(image => observer.observe(image));
-
-    // Event Listeners
-    window.addEventListener('wheel', handleDesktopScroll, { passive: false });
+    // Event listeners
+    window.addEventListener('wheel', handleWheelEvent, { passive: false });
+    imageContainer.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    document.addEventListener('mousemove', function(event) {
-        if (event.clientX > 245) {
-            scrollingEnabled = true;
-            imageContainer.classList.add('scroll-snap');
-        } else {
-            scrollingEnabled = false;
-            imageContainer.classList.remove('scroll-snap');
-        }
-    });
-
-    // Menu functionality
+    // Menu handling (keeping your original implementation)
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
     const closeMenu = document.getElementById('closeMenu');
@@ -167,5 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initialize
-    initializeGallery();
+    images[0].classList.add('active');
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+        imageContainer.scrollTo(0, 0);
+    }, 100);
 });
