@@ -7,7 +7,7 @@ body, html {
     overflow: hidden;
     background-color: #fff;
     font-family: 'EB Garamond', serif;
-    cursor: none; /* Ensure cursor is hidden globally */
+    cursor: none;
 }
 
 body {
@@ -15,11 +15,11 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    cursor: none; /* Ensure cursor is hidden on body */
+    cursor: none;
 }
 
 .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
-    cursor: none; /* Ensure cursor is hidden on specific elements */
+    cursor: none;
 }
 
 .menu {
@@ -67,35 +67,36 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    scroll-behavior: smooth; /* Smooth scrolling */
+    scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
-    scroll-snap-stop: always; /* Added this line */
-    scrollbar-width: none; /* Hide scrollbar for Firefox */
-    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+    scroll-snap-stop: always;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .image-container::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+    display: none;
 }
 
 .image {
     flex: 0 0 100vh;
     width: 100%;
-    background-size: contain; /* Ensure the image fits within the container */
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
-    opacity: 1; /* Default to full opacity */
+    transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 1;
 }
 
 .image.active {
-    opacity: 1; /* Ensure active images have full opacity */
+    opacity: 1;
 }
 
 .image.inactive {
-    opacity: 1; /* Ensure inactive images also have full opacity for testing */
+    opacity: 1;
 }
 
 .footer {
@@ -109,28 +110,19 @@ body {
     white-space: nowrap;
 }
 
-/* Add this media query to make the cursor visible on desktop */
+/* Desktop media query */
 @media (min-width: 601px) {
     body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
-        cursor: auto; /* Reset cursor to default */
+        cursor: auto;
     }
 
-    /* Add white space between images except the last one on desktop */
     .image:not(:last-child) {
-        margin-bottom: 30px; /* Add white space between images */
+        margin-bottom: 30px;
     }
-}
 
-/* Mobile styles */
-@media (max-width: 600px) {
-    .image:not(:last-child) {
-        margin-bottom: 0px; /* Adjust white space between images for mobile */
+    .close-menu {
+        display: none !important;
     }
-}
-
-/* Scroll snap styles */
-.scroll-snap {
-    scroll-snap-type: y mandatory;
 }
 
 /* Mobile styles */
@@ -236,7 +228,7 @@ body {
         position: fixed;
         top: 3.0px;
         right: 26.15px;
-        color: black; /* Black color for the 'X' button */
+        color: black;
         z-index: 1001;
     }
 
@@ -248,12 +240,12 @@ body {
         width: 100%;
         height: 100vh;
         position: fixed;
-        top: -20px; /* Adjusted top property to be 20px higher */
+        top: -20px;
         left: 0;
         background-color: #acacad;
         z-index: 1000;
         opacity: 0;
-        transition: opacity 0.5s ease-in-out; /* Add smoother transition effect */
+        transition: opacity 0.5s ease-in-out;
     }
 
     .menu ul.show {
@@ -274,56 +266,26 @@ body {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: calc(100vh - 40px); /* Adjusted height to account for header/footer */
+        height: calc(100vh - 40px);
         width: 100%;
-        position: absolute; /* Absolute positioning for vertical centering */
+        position: absolute;
         top: 50%;
-        transform: translateY(-50%); /* Center container vertically */
+        transform: translateY(-50%);
         scroll-snap-type: y mandatory;
-        scroll-snap-stop: always; /* Added this line */
+        scroll-snap-stop: always;
         overflow-y: scroll;
-        scroll-behavior: smooth; /* Smooth scrolling */
-        scrollbar-width: none; /* Hide scrollbar for Firefox */
-        -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
-    }
-
-    .image-container::-webkit-scrollbar {
-        display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
     }
 
     .image {
-        flex: 0 0 calc(100vh - 40px); /* Adjusted height to match container */
-        width: 100%;
-        background-size: contain; /* Ensure the image fits within the container */
-        background-position: center;
-        background-repeat: no-repeat;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-        transition: background-image 1.25s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition */
-        opacity: 1; /* Default to full opacity */
-    }
-
-    .image.active {
-        opacity: 1; /* Ensure active images have full opacity */
-    }
-
-    .image.inactive {
-        opacity: 1; /* Ensure inactive images also have full opacity for testing */
+        flex: 0 0 calc(100vh - 40px);
     }
 
     .image:last-child {
-        flex: 1 0 calc(100vh - 40px); /* Make sure the last image fills the remaining space */
-    }
-
-    .mobile-image {
-        display: block;
-        width: 100%;
-        height: auto;
-        object-fit: contain;
-    }
-
-    .desktop-image {
-        display: none;
+        flex: 1 0 calc(100vh - 40px);
     }
 
     .footer {
@@ -337,7 +299,7 @@ body {
     }
 }
 
-/* Desktop styles */
+/* Desktop/Mobile image display */
 .desktop-image {
     display: block;
     width: auto;
@@ -347,9 +309,11 @@ body {
     display: none;
 }
 
-/* Hide the close-menu element on desktop screens */
-@media (min-width: 601px) {
-    .close-menu {
-        display: none !important;
+@media (max-width: 600px) {
+    .mobile-image {
+        display: block;
+    }
+    .desktop-image {
+        display: none;
     }
 }
