@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-counter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            z-index: 2;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+        }
+
+        .controls button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+
+        .image-container {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .gallery-image {
+            max-width: 100%;
+            max-height: 90vh;
+            display: block;
+            margin: auto;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 20px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .nav-button:hover {
+            opacity: 1;
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-container">
+        <div class="image-counter">1 / 15</div>
+        <div class="controls">
+            <button onclick="toggleFullscreen()">⛶</button>
+            <button onclick="toggleSlideshow()">▶</button>
+        </div>
+        <button class="nav-button prev" onclick="prevImage()">←</button>
+        <div class="image-container">
+            <img src="your-image-1.jpg" alt="Gallery image" class="gallery-image">
+        </div>
+        <button class="nav-button next" onclick="nextImage()">→</button>
+    </div>
+
+    <script>
+        const images = [
+            'UN_1.jpg',
+            'UN_2.jpg',
+            'UN_3.jpg'
+            // Add more image paths here
+        ];
+        
+        let currentIndex = 0;
+        const imageElement = document.querySelector('.gallery-image');
+        const counter = document.querySelector('.image-counter');
+        
+        function updateImage() {
+            imageElement.src = images[currentIndex];
+            counter.textContent = `${currentIndex + 1} / ${images.length}`;
+        }
+        
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateImage();
+        }
+        
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateImage();
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+            if (e.key === 'Escape' && document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
