@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        // Cancel any pending scroll animations
+        // Clear any existing timeout
         if (scrollTimeout) {
             clearTimeout(scrollTimeout);
         }
@@ -36,23 +36,34 @@ document.addEventListener('DOMContentLoaded', () => {
             behavior: 'smooth'
         });
 
+        // Wait for the scroll animation to complete
         scrollTimeout = setTimeout(() => {
             isTransitioning = false;
-        }, 800); // Reduced from 1250ms for snappier response
+        }, 800);
     }
 
     function handleDesktopScroll(event) {
-        if (!scrollingEnabled || isTransitioning) return;
+        if (!scrollingEnabled || isTransitioning) {
+            event.preventDefault();
+            return;
+        }
         
         const now = Date.now();
-        if (now - lastScrollTime < 50) return; // Debounce aggressive scroll events
+        if (now - lastScrollTime < 250) { // Increased from 50ms to 250ms
+            event.preventDefault();
+            return;
+        }
         lastScrollTime = now;
 
         const direction = event.deltaY > 0 ? 1 : -1;
-        const sensitivity = 25; // Adjust this value to change scroll sensitivity
+        const sensitivity = 25;
 
-        if (Math.abs(event.deltaY) < sensitivity) return;
+        if (Math.abs(event.deltaY) < sensitivity) {
+            event.preventDefault();
+            return;
+        }
 
+        // Prevent scrolling more than one image at a time
         if (direction > 0 && currentIndex < images.length - 1) {
             event.preventDefault();
             currentIndex++;
