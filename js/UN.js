@@ -6,14 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let scrollingEnabled = true;
     let lastScrollTime = Date.now();
     let scrollTimeout;
+    let scrollLocked = false;
 
     function showImage(index) {
-        if (isTransitioning) return;
+        if (isTransitioning || scrollLocked) return;
         
-        // Clear any existing transition timeout
+        // Clear any existing timeouts
         if (scrollTimeout) {
             clearTimeout(scrollTimeout);
         }
+
+        // Lock scrolling immediately
+        isTransitioning = true;
+        scrollLocked = true;
 
         images.forEach((img, i) => {
             if (i === index) {
@@ -30,43 +35,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetTop = targetImage.getBoundingClientRect().top;
         const scrollOffset = targetTop - containerTop;
 
-        // Increased duration of smooth scroll
+        // Much slower scroll transition
         imageContainer.style.scrollBehavior = 'smooth';
-        imageContainer.style.scrollDuration = '2s';
+        imageContainer.style.scrollDuration = '3.5s'; // Increased to 3.5 seconds
         
         imageContainer.scrollBy({
             top: scrollOffset,
             behavior: 'smooth'
         });
 
-        // Lock transitions for the full duration of the scroll plus a buffer
-        isTransitioning = true;
+        // Extended transition lock
         scrollTimeout = setTimeout(() => {
             isTransitioning = false;
-        }, 2500); // Wait 2.5 seconds before allowing next scroll
+            // Add additional delay before completely unlocking scroll
+            setTimeout(() => {
+                scrollLocked = false;
+            }, 500);
+        }, 4000); // Increased to 4 seconds total
     }
 
     function handleDesktopScroll(event) {
         // Always prevent default scroll
         event.preventDefault();
         
-        if (!scrollingEnabled || isTransitioning) {
+        if (!scrollingEnabled || isTransitioning || scrollLocked) {
             return;
         }
 
         const now = Date.now();
-        // Longer debounce time to match animation duration
-        if (now - lastScrollTime < 2500) {
+        // Even longer debounce time
+        if (now - lastScrollTime < 4000) { // Match the transition duration
             return;
         }
         
-        // Store the intended direction but ignore magnitude
+        // Only care about initial scroll direction
         const direction = Math.sign(event.deltaY);
         
-        // Queue the next scroll
+        // Update last scroll time
         lastScrollTime = now;
         
-        // Only allow single image advancement
+        // Strict single image advancement
         if (direction > 0 && currentIndex < images.length - 1) {
             currentIndex++;
             showImage(currentIndex);
@@ -76,15 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Rest of your code remains the same...
     let touchStartY = null;
 
     function handleTouchStart(event) {
-        if (window.innerWidth > 600) return; // Only handle touch on mobile
+        if (window.innerWidth > 600) return;
         touchStartY = event.touches[0].clientY;
     }
 
     function handleTouchMove(event) {
-        if (window.innerWidth > 600 || !touchStartY || isTransitioning) return;
+        if (window.innerWidth > 600 || !touchStartY || isTransitioning || scrollLocked) return;
 
         const touchY = event.touches[0].clientY;
         const touchDelta = touchStartY - touchY;
@@ -106,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIndex = 0;
         showImage(currentIndex);
         
-        // Wait for all images to load
         Promise.all(Array.from(images).map(img => {
             const bgImage = img.style.backgroundImage;
             if (!bgImage) return Promise.resolve();
@@ -124,9 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Intersection Observer for backup scroll detection
     const observer = new IntersectionObserver((entries) => {
-        if (isTransitioning) return;
+        if (isTransitioning || scrollLocked) return;
         
         entries.forEach(entry => {
             if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
@@ -148,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     images.forEach(image => observer.observe(image));
 
-    // Event Listeners
     window.addEventListener('wheel', handleDesktopScroll, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
@@ -163,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Menu functionality
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
     const closeMenu = document.getElementById('closeMenu');
@@ -178,6 +183,5 @@ document.addEventListener('DOMContentLoaded', () => {
         closeMenu.classList.remove('show');
     });
 
-    // Initialize
     initializeGallery();
 });
