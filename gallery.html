@@ -44,6 +44,31 @@
             align-items: center;
         }
 
+        .menu-items {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            display: none;
+            z-index: 1;
+        }
+
+        .menu-items a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 0;
+            font-size: 14px;
+            opacity: 0.8;
+            display: inline-block;
+            margin: 0 10px;
+            transition: opacity 0.3s;
+        }
+
+        .dropdown:hover .menu-items {
+            display: block;
+        }
+
         .top-nav a {
             color: white;
             text-decoration: underline;
@@ -53,40 +78,6 @@
         }
 
         .top-nav a:hover {
-            opacity: 1;
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: transparent;
-            padding: 50px 0;
-            text-align: center;
-            z-index: 1000;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-content a {
-            color: white;
-            text-decoration: none;
-            padding: 5px 0;
-            font-size: 14px;
-            display: block;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-
-        .dropdown-content a:hover {
             opacity: 1;
         }
 
@@ -119,26 +110,14 @@
             height: 100%;
         }
 
-        .fullscreen-icon::before,
-        .fullscreen-icon::after {
+        .fullscreen-icon::before {
             content: '';
             position: absolute;
-            width: 7px;
-            height: 7px;
-        }
-
-        .fullscreen-icon::before {
-            border-left: 1.5px solid #fff;
-            border-top: 1.5px solid #fff;
             top: 0;
             left: 0;
-        }
-
-        .fullscreen-icon::after {
-            border-right: 1.5px solid #fff;
-            border-bottom: 1.5px solid #fff;
-            bottom: 0;
             right: 0;
+            bottom: 0;
+            border: 1px solid #fff;
         }
 
         .close-icon {
@@ -153,7 +132,7 @@
             content: '';
             position: absolute;
             width: 16px;
-            height: 1.5px;
+            height: 1px;
             background-color: #fff;
             top: 50%;
             left: 50%;
@@ -217,13 +196,11 @@
 
         .active-series {
             opacity: 1 !important;
-            position: relative;
         }
 
         .active-series::before {
             content: '>';
-            position: absolute;
-            left: -15px;
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -234,7 +211,7 @@
             <a href="info.html">Info</a>
             <div class="dropdown">
                 <a href="#" class="dropbtn">Series</a>
-                <div class="dropdown-content">
+                <div class="menu-items">
                     <a href="un.html" class="active-series">UN General Assembly</a>
                     <a href="sailing.html">Sailing Documentation</a>
                     <a href="newengland.html">New England</a>
