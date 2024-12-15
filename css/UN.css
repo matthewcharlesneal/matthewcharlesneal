@@ -33,6 +33,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    z-index: 1000;
 }
 
 .menu h1 {
@@ -60,8 +61,12 @@ body {
     padding: 10px 0;
 }
 
-/* Desktop-specific container handling */
+/* Desktop-specific container and image handling */
 @media (min-width: 601px) {
+    body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
+        cursor: auto;
+    }
+
     .image-container {
         margin-left: 245px;
         width: calc(100% - 245px);
@@ -74,33 +79,36 @@ body {
         right: 0;
     }
 
+    .scroll-container {
+        position: relative;
+        height: 100%;
+        transform: translateY(0);
+        transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+        will-change: transform;
+    }
+
     .image {
-        flex: 0 0 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100vh;
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
-        transform: translateY(0);
-        transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1.000), opacity 1s ease-in-out;
-        will-change: transform, opacity;
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-    }
-
-    .image:not(:last-child) {
-        margin-bottom: 30px;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+        pointer-events: none;
     }
 
     .image.active {
         opacity: 1;
+        z-index: 2;
     }
 
     .image.inactive {
-        opacity: 0.3;
-    }
-
-    body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
-        cursor: auto;
+        opacity: 0;
+        z-index: 1;
     }
 
     .close-menu {
@@ -309,5 +317,12 @@ body {
     }
     .desktop-image {
         display: none;
+    }
+}
+
+/* Additional cursor styles */
+@media (min-width: 601px) {
+    body, .menu, .image-container, .menu ul, .menu ul li a, .menu-toggle, .close-menu {
+        cursor: auto;
     }
 }
