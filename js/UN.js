@@ -1,20 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth <= 600) return; // Don't apply to mobile
+
     const imageContainer = document.querySelector('.image-container');
     const images = Array.from(document.querySelectorAll('.image'));
     let currentIndex = 0;
     let isTransitioning = false;
     let scrollingEnabled = true;
+    const TRANSITION_DURATION = 1500; // 1.5 seconds to match CSS
     let lastScrollTime = Date.now();
-    const TRANSITION_DURATION = 1000; // Duration of transition in milliseconds
+    let scrollTimeout;
+    
+    // Create scroll container
+    const scrollContainer = document.createElement('div');
+    scrollContainer.className = 'scroll-container';
+    while (imageContainer.firstChild) {
+        scrollContainer.appendChild(imageContainer.firstChild);
+    }
+    imageContainer.appendChild(scrollContainer);
 
-    function updateImagePositions() {
-        if (window.innerWidth <= 600) return; // Don't apply to mobile
+    function showImage(index) {
+        if (isTransitioning) return;
+        
+        isTransitioning = true;
+        clearTimeout(scrollTimeout);
 
-        images.forEach((img, index) => {
-            const offset = (index - currentIndex) * 100;
-            img.style.transform = `translateY(${offset}vh)`;
-            
-            if (index === currentIndex) {
+        // Update classes
+        images.forEach((img, i) => {
+            if (i === index) {
                 img.classList.add('active');
                 img.classList.remove('inactive');
             } else {
@@ -22,86 +34,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.classList.add('inactive');
             }
         });
+
+        // Update position
+        scrollContainer.style.transform = `translateY(-${index * 100}vh)`;
+
+        // Reset transition state
+        scrollTimeout = setTimeout(() => {
+            isTransitioning = false;
+        }, TRANSITION_DURATION + 100); // Add small buffer
     }
 
-    function handleDesktopScroll(e) {
-        // Only proceed if we're on desktop, scrolling is enabled, and not currently transitioning
-        if (window.innerWidth <= 600 || !scrollingEnabled || isTransitioning) {
-            e.preventDefault();
+    function handleScroll(event) {
+        if (!scrollingEnabled || isTransitioning) {
+            event.preventDefault();
             return;
         }
 
-        // Get the current time
         const now = Date.now();
-        
-        // If we're within the transition duration, prevent scroll
         if (now - lastScrollTime < TRANSITION_DURATION) {
-            e.preventDefault();
+            event.preventDefault();
             return;
         }
 
-        // Determine scroll direction, ignoring intensity
-        const direction = e.deltaY > 0 ? 1 : -1;
+        // Determine scroll direction
+        const direction = event.deltaY > 0 ? 1 : -1;
 
-        // Check if we can move in the desired direction
+        // Check boundaries
         if ((direction > 0 && currentIndex < images.length - 1) ||
             (direction < 0 && currentIndex > 0)) {
             
-            e.preventDefault();
-            isTransitioning = true;
+            event.preventDefault();
             lastScrollTime = now;
-            
+
             // Update index by exactly one
             currentIndex = Math.max(0, Math.min(images.length - 1, currentIndex + direction));
-            
-            // Update positions
-            updateImagePositions();
-
-            // Reset transition state after animation completes
-            setTimeout(() => {
-                isTransitioning = false;
-            }, TRANSITION_DURATION);
+            showImage(currentIndex);
         }
     }
 
-    // Mobile touch handling
-    let touchStartY = null;
-
-    function handleTouchStart(e) {
-        if (window.innerWidth > 600) return;
-        touchStartY = e.touches[0].clientY;
-    }
-
-    function handleTouchMove(e) {
-        if (window.innerWidth > 600 || !touchStartY || isTransitioning) return;
-
-        const touchY = e.touches[0].clientY;
-        const touchDelta = touchStartY - touchY;
-
-        if (Math.abs(touchDelta) > 20) {
-            if (touchDelta > 0 && currentIndex < images.length - 1) {
-                currentIndex++;
-            } else if (touchDelta < 0 && currentIndex > 0) {
-                currentIndex--;
-            }
-
-            updateImagePositions();
-            touchStartY = null;
-        }
-    }
-
-    // Prevent default on wheel event to avoid any native scrolling
-    window.addEventListener('wheel', (e) => {
+    // Prevent any default scroll behavior
+    const preventScroll = (e) => {
         if (window.innerWidth > 600) {
             e.preventDefault();
         }
-    }, { passive: false });
+    };
 
-    // Add event listeners with proper options
-    window.addEventListener('wheel', handleDesktopScroll, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('resize', updateImagePositions);
+    // Event Listeners
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('wheel', handleScroll, { passive: false });
 
     // Mouse position for enabling/disabling scroll
     document.addEventListener('mousemove', (event) => {
@@ -109,7 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollingEnabled = event.clientX > 245;
     });
 
-    // Menu functionality
+    // Handle resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 600) {
+            showImage(currentIndex);
+        }
+    });
+
+    // Initialize
+    images[0].classList.add('active');
+
+    // Keep existing menu functionality
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
     const closeMenu = document.getElementById('closeMenu');
@@ -123,12 +113,4 @@ document.addEventListener('DOMContentLoaded', () => {
         menuList.classList.remove('show');
         closeMenu.classList.remove('show');
     });
-
-    // Initialize gallery
-    initializeGallery();
-
-    function initializeGallery() {
-        currentIndex = 0;
-        updateImagePositions();
-    }
 });
