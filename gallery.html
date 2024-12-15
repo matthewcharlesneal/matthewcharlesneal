@@ -30,7 +30,7 @@
             left: 20px;
             color: #fff;
             z-index: 2;
-            font-size: 12px; /* Smaller counter text */
+            font-size: 12px;
             opacity: 0.8;
         }
 
@@ -48,12 +48,46 @@
             cursor: pointer;
             padding: 5px;
             margin-left: 10px;
-            font-size: 12px; /* Smaller fullscreen icon */
+            font-size: 16px;
             opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .controls button:hover {
             opacity: 1;
+        }
+
+        .fullscreen-icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            position: relative;
+            border: 2px solid #fff;
+        }
+
+        .fullscreen-icon::before,
+        .fullscreen-icon::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border: 2px solid #fff;
+        }
+
+        .fullscreen-icon::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .fullscreen-icon::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
         }
 
         .image-container {
@@ -100,7 +134,7 @@
     <div class="gallery-container">
         <div class="image-counter">1 / 15</div>
         <div class="controls">
-            <button onclick="toggleFullscreen()">⛶</button>
+            <button onclick="toggleFullscreen()"><span class="fullscreen-icon"></span></button>
         </div>
         <button class="nav-button prev" onclick="prevImage()">←</button>
         <div class="image-container">
