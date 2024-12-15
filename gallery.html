@@ -58,18 +58,18 @@
 
         .dropdown {
             position: relative;
-            display: inline-block;
         }
 
         .dropdown-content {
             display: none;
-            position: absolute;
-            background-color: #000;
-            min-width: 180px;
-            top: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
             right: 0;
-            margin-top: 5px;
-            padding: 5px 0;
+            background-color: transparent;
+            padding: 50px 0;
+            text-align: center;
+            z-index: 1000;
         }
 
         .dropdown:hover .dropdown-content {
@@ -78,24 +78,16 @@
 
         .dropdown-content a {
             color: white;
-            padding: 8px 15px;
             text-decoration: none;
-            display: block;
+            padding: 5px 0;
             font-size: 14px;
-            text-align: left;
+            display: block;
+            opacity: 0.8;
+            transition: opacity 0.3s;
         }
 
-        .current-series {
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .current-series::before {
-            content: '>';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
+        .dropdown-content a:hover {
+            opacity: 1;
         }
 
         .controls {
@@ -103,8 +95,6 @@
             top: 20px;
             right: 20px;
             z-index: 2;
-            display: flex;
-            align-items: center;
         }
 
         .controls button {
@@ -113,10 +103,9 @@
             color: #fff;
             cursor: pointer;
             padding: 0;
-            margin-left: 10px;
             opacity: 0.8;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             position: relative;
         }
 
@@ -130,26 +119,26 @@
             height: 100%;
         }
 
-        .fullscreen-icon::before {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-top: 1.5px solid #fff;
-            border-left: 1.5px solid #fff;
-            top: 2px;
-            left: 2px;
-        }
-
+        .fullscreen-icon::before,
         .fullscreen-icon::after {
             content: '';
             position: absolute;
-            width: 6px;
-            height: 6px;
-            border-bottom: 1.5px solid #fff;
+            width: 7px;
+            height: 7px;
+        }
+
+        .fullscreen-icon::before {
+            border-left: 1.5px solid #fff;
+            border-top: 1.5px solid #fff;
+            top: 0;
+            left: 0;
+        }
+
+        .fullscreen-icon::after {
             border-right: 1.5px solid #fff;
-            bottom: 2px;
-            right: 2px;
+            border-bottom: 1.5px solid #fff;
+            bottom: 0;
+            right: 0;
         }
 
         .close-icon {
@@ -225,6 +214,17 @@
         .next {
             right: 20px;
         }
+
+        .active-series {
+            opacity: 1 !important;
+            position: relative;
+        }
+
+        .active-series::before {
+            content: '>';
+            position: absolute;
+            left: -15px;
+        }
     </style>
 </head>
 <body>
@@ -235,7 +235,7 @@
             <div class="dropdown">
                 <a href="#" class="dropbtn">Series</a>
                 <div class="dropdown-content">
-                    <a href="un.html" class="current-series">UN General Assembly</a>
+                    <a href="un.html" class="active-series">UN General Assembly</a>
                     <a href="sailing.html">Sailing Documentation</a>
                     <a href="newengland.html">New England</a>
                     <a href="newyork.html">New York</a>
