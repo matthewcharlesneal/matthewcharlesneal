@@ -3,28 +3,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const images = Array.from(document.querySelectorAll('.image'));
     let currentIndex = 0;
     let isTransitioning = false;
-    let scrollingEnabled = true;
 
+    // Only for mobile devices
     function showImage(index) {
-        if (isTransitioning) return;
-        isTransitioning = true;
-
-        const targetImage = images[index];
-        targetImage.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        setTimeout(() => {
-            isTransitioning = false;
-        }, 1250);
-    }
-
-    function handleMobileScroll(index) {
         if (window.innerWidth <= 600) {
-            currentIndex = index;
-            showImage(currentIndex);
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            const targetImage = images[index];
+            targetImage.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 1250);
         }
     }
 
-    // Handle mobile touch events
+    // Mobile touch events
     let initialTouchPos = null;
 
     function handleTouchStart(event) {
@@ -52,51 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function initializeGallery() {
-        Promise.all(Array.from(images).map(img => {
-            if (img.complete) return Promise.resolve();
-            return new Promise(resolve => img.addEventListener('load', resolve));
-        })).then(() => {
-            requestAnimationFrame(() => {
-                window.scrollTo(0, 0);
-                images[0].scrollIntoView({ behavior: "auto", block: "start" });
-            });
-        });
-    }
-
-    function handleIntersection(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && window.innerWidth <= 600) {
-                const index = images.indexOf(entry.target);
-                if (index !== -1) {
-                    currentIndex = index;
-                }
-            }
-        });
-    }
-
-    // Set up intersection observer for mobile
-    const observer = new IntersectionObserver(handleIntersection, {
-        threshold: 0.5
-    });
-
-    images.forEach(image => {
-        observer.observe(image);
-    });
-
-    // Event Listeners
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-
-    window.addEventListener('orientationchange', () => {
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-            if (window.innerWidth <= 600) {
-                showImage(currentIndex);
-            }
-        }, 100);
-    });
-
     // Menu functionality
     const menuToggle = document.getElementById('menuToggle');
     const menuList = document.getElementById('menuList');
@@ -112,6 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
         closeMenu.classList.remove('show');
     });
 
-    // Initialize the gallery
-    initializeGallery();
+    // Mobile event listeners
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
+
+    // Handle orientation change on mobile
+    window.addEventListener('orientationchange', () => {
+        if (window.innerWidth <= 600) {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                showImage(currentIndex);
+            }, 100);
+        }
+    });
 });
