@@ -40,16 +40,16 @@
             right: 60px;
             z-index: 2;
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            align-items: center;
         }
 
         .top-nav a {
             color: white;
-            text-decoration: none;
+            text-decoration: underline;
             font-size: 14px;
             opacity: 0.8;
             transition: opacity 0.3s;
-            text-decoration: underline;
         }
 
         .top-nav a:hover {
@@ -64,13 +64,12 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: black;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+            background-color: #000;
+            min-width: 180px;
             top: 100%;
             right: 0;
-            margin-top: 0;
+            margin-top: 5px;
+            padding: 5px 0;
         }
 
         .dropdown:hover .dropdown-content {
@@ -79,15 +78,24 @@
 
         .dropdown-content a {
             color: white;
-            padding: 12px 16px;
+            padding: 8px 15px;
             text-decoration: none;
             display: block;
             font-size: 14px;
-            text-align: right;
+            text-align: left;
         }
 
-        .dropdown-content a:hover {
-            background-color: #333;
+        .current-series {
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .current-series::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .controls {
@@ -95,6 +103,8 @@
             top: 20px;
             right: 20px;
             z-index: 2;
+            display: flex;
+            align-items: center;
         }
 
         .controls button {
@@ -105,8 +115,8 @@
             padding: 0;
             margin-left: 10px;
             opacity: 0.8;
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             position: relative;
         }
 
@@ -123,10 +133,10 @@
         .fullscreen-icon::before {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
-            border-top: 2px solid #fff;
-            border-left: 2px solid #fff;
+            width: 6px;
+            height: 6px;
+            border-top: 1.5px solid #fff;
+            border-left: 1.5px solid #fff;
             top: 2px;
             left: 2px;
         }
@@ -134,10 +144,10 @@
         .fullscreen-icon::after {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
-            border-bottom: 2px solid #fff;
-            border-right: 2px solid #fff;
+            width: 6px;
+            height: 6px;
+            border-bottom: 1.5px solid #fff;
+            border-right: 1.5px solid #fff;
             bottom: 2px;
             right: 2px;
         }
@@ -153,8 +163,8 @@
         .close-icon::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 2px;
+            width: 16px;
+            height: 1.5px;
             background-color: #fff;
             top: 50%;
             left: 50%;
@@ -225,7 +235,7 @@
             <div class="dropdown">
                 <a href="#" class="dropbtn">Series</a>
                 <div class="dropdown-content">
-                    <a href="un.html">UN General Assembly</a>
+                    <a href="un.html" class="current-series">UN General Assembly</a>
                     <a href="sailing.html">Sailing Documentation</a>
                     <a href="newengland.html">New England</a>
                     <a href="newyork.html">New York</a>
