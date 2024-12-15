@@ -9,64 +9,50 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        images.forEach((img, i) => {
-            if (i === index) {
-                img.classList.add('active');
-                img.classList.remove('inactive');
-            } else {
-                img.classList.remove('active');
-                img.classList.add('inactive');
-            }
-        });
-
-        requestAnimationFrame(() => {
-            images[index].scrollIntoView({ behavior: "smooth", block: "start" });
-        });
+        const targetImage = images[index];
+        targetImage.scrollIntoView({ behavior: "smooth", block: "start" });
 
         setTimeout(() => {
             isTransitioning = false;
         }, 1250);
     }
 
-    function handleScroll(event) {
-        if (window.innerWidth > 600 && scrollingEnabled && !isTransitioning) {
-            if (event.deltaY > 0 && currentIndex < images.length - 1) {
-                currentIndex++;
-                showImage(currentIndex);
-            } else if (event.deltaY < 0 && currentIndex > 0) {
-                currentIndex--;
-                showImage(currentIndex);
-            }
+    function handleMobileScroll(index) {
+        if (window.innerWidth <= 600) {
+            currentIndex = index;
+            showImage(currentIndex);
         }
     }
 
+    // Handle mobile touch events
     let initialTouchPos = null;
 
     function handleTouchStart(event) {
-        initialTouchPos = event.touches[0].clientY;
+        if (window.innerWidth <= 600) {
+            initialTouchPos = event.touches[0].clientY;
+        }
     }
 
     function handleTouchMove(event) {
-        if (isTransitioning || initialTouchPos === null) return;
+        if (window.innerWidth <= 600) {
+            if (isTransitioning || initialTouchPos === null) return;
 
-        const currentTouchPos = event.touches[0].clientY;
-        const touchDelta = initialTouchPos - currentTouchPos;
+            const currentTouchPos = event.touches[0].clientY;
+            const touchDelta = initialTouchPos - currentTouchPos;
 
-        if (touchDelta > 20 && currentIndex < images.length - 1) {
-            currentIndex++;
-            showImage(currentIndex);
-        } else if (touchDelta < -20 && currentIndex > 0) {
-            currentIndex--;
-            showImage(currentIndex);
+            if (touchDelta > 20 && currentIndex < images.length - 1) {
+                currentIndex++;
+                showImage(currentIndex);
+            } else if (touchDelta < -20 && currentIndex > 0) {
+                currentIndex--;
+                showImage(currentIndex);
+            }
+
+            initialTouchPos = null;
         }
-
-        initialTouchPos = null;
     }
 
     function initializeGallery() {
-        currentIndex = 0;
-        showImage(currentIndex);
-        
         Promise.all(Array.from(images).map(img => {
             if (img.complete) return Promise.resolve();
             return new Promise(resolve => img.addEventListener('load', resolve));
@@ -78,35 +64,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function forceStartAtFirstImage() {
-        currentIndex = 0;
-        showImage(currentIndex);
-        window.scrollTo(0, 0);
-        images[0].scrollIntoView({ behavior: "auto", block: "start" });
+    function handleIntersection(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && window.innerWidth <= 600) {
+                const index = images.indexOf(entry.target);
+                if (index !== -1) {
+                    currentIndex = index;
+                }
+            }
+        });
     }
 
+    // Set up intersection observer for mobile
+    const observer = new IntersectionObserver(handleIntersection, {
+        threshold: 0.5
+    });
+
+    images.forEach(image => {
+        observer.observe(image);
+    });
+
     // Event Listeners
-    window.addEventListener('wheel', handleScroll);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
     window.addEventListener('orientationchange', () => {
         setTimeout(() => {
             window.scrollTo(0, 0);
-            showImage(currentIndex);
+            if (window.innerWidth <= 600) {
+                showImage(currentIndex);
+            }
         }, 100);
-    });
-
-    window.addEventListener('resize', forceStartAtFirstImage);
-
-    document.addEventListener('mousemove', function(event) {
-        if (event.clientX > 245) {
-            scrollingEnabled = true;
-            imageContainer.classList.add('scroll-snap');
-        } else {
-            scrollingEnabled = false;
-            imageContainer.classList.remove('scroll-snap');
-        }
     });
 
     // Menu functionality
@@ -126,7 +114,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize the gallery
     initializeGallery();
-
-    // Force start at first image on page load
-    forceStartAtFirstImage();
 });
