@@ -30,14 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetTop = targetImage.getBoundingClientRect().top;
         const scrollOffset = targetTop - containerTop;
 
+        // Increased duration of smooth scroll
+        imageContainer.style.scrollBehavior = 'smooth';
+        imageContainer.style.scrollDuration = '2s';
+        
         imageContainer.scrollBy({
             top: scrollOffset,
             behavior: 'smooth'
         });
+
+        // Lock transitions for the full duration of the scroll plus a buffer
+        isTransitioning = true;
+        scrollTimeout = setTimeout(() => {
+            isTransitioning = false;
+        }, 2500); // Wait 2.5 seconds before allowing next scroll
     }
 
     function handleDesktopScroll(event) {
-        // Always prevent the default scroll behavior immediately
+        // Always prevent default scroll
         event.preventDefault();
         
         if (!scrollingEnabled || isTransitioning) {
@@ -45,18 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const now = Date.now();
-        // Even longer debounce for MacBook momentum scrolling
-        if (now - lastScrollTime < 1000) {
+        // Longer debounce time to match animation duration
+        if (now - lastScrollTime < 2500) {
             return;
         }
         
-        // Lock scrolling for a brief period after each successful scroll
-        lastScrollTime = now;
-        isTransitioning = true;
-
-        // Only care about scroll direction, ignore magnitude completely
+        // Store the intended direction but ignore magnitude
         const direction = Math.sign(event.deltaY);
         
+        // Queue the next scroll
+        lastScrollTime = now;
+        
+        // Only allow single image advancement
         if (direction > 0 && currentIndex < images.length - 1) {
             currentIndex++;
             showImage(currentIndex);
@@ -64,11 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex--;
             showImage(currentIndex);
         }
-
-        // Force a cooldown period before allowing next scroll
-        setTimeout(() => {
-            isTransitioning = false;
-        }, 1200); // Longer than the animation duration
     }
 
     let touchStartY = null;
