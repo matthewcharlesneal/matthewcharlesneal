@@ -26,7 +26,7 @@
 
         .image-counter {
             position: absolute;
-            top: 20px; /* Updated spacing */
+            top: 20px;
             left: 20px;
             color: #fff;
             z-index: 2;
@@ -36,7 +36,7 @@
 
         .top-nav {
             position: absolute;
-            top: 20px; /* Updated spacing */
+            top: 15px;
             right: 60px;
             z-index: 2;
             display: flex;
@@ -46,7 +46,7 @@
 
         .menu-items {
             position: fixed;
-            top: 20px; /* Updated spacing */
+            top: 15px;
             left: 0;
             right: 0;
             text-align: center;
@@ -87,7 +87,7 @@
 
         .controls {
             position: absolute;
-            top: 20px; /* Updated spacing */
+            top: 15px;
             right: 20px;
             z-index: 2;
         }
@@ -99,8 +99,8 @@
             cursor: pointer;
             padding: 0;
             opacity: 0.8;
-            width: 24px; /* Updated size */
-            height: 24px; /* Updated size */
+            width: 24px;
+            height: 24px;
             position: relative;
         }
 
@@ -114,26 +114,45 @@
             height: 100%;
         }
 
-        /* Updated fullscreen icon to match your reference */
         .fullscreen-icon::before,
-        .fullscreen-icon::after {
+        .fullscreen-icon::after,
+        .fullscreen-icon span::before,
+        .fullscreen-icon span::after {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border: 1px solid #fff;
         }
 
+        /* Top-left corner */
         .fullscreen-icon::before {
-            top: 2px;
-            left: 2px;
+            top: 0;
+            left: 0;
             border-right: none;
             border-bottom: none;
         }
 
+        /* Top-right corner */
         .fullscreen-icon::after {
-            bottom: 2px;
-            right: 2px;
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        /* Bottom-left corner */
+        .fullscreen-icon span::before {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
+
+        /* Bottom-right corner */
+        .fullscreen-icon span::after {
+            bottom: 0;
+            right: 0;
             border-left: none;
             border-top: none;
         }
@@ -230,7 +249,9 @@
         </div>
         <div class="controls">
             <button onclick="toggleFullscreen()">
-                <span class="fullscreen-icon"></span>
+                <span class="fullscreen-icon">
+                    <span></span>
+                </span>
                 <span class="close-icon"></span>
             </button>
         </div>
