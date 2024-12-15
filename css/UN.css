@@ -81,8 +81,10 @@ body {
         background-position: center;
         background-repeat: no-repeat;
         transform: translateY(0);
-        transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000);
-        will-change: transform;
+        transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1.000), opacity 1s ease-in-out;
+        will-change: transform, opacity;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
 
     .image:not(:last-child) {
