@@ -58,11 +58,15 @@
             color: white;
             text-decoration: none;
             padding: 5px 0;
-            font-size: 14px;
+            font-size: 12px;
             opacity: 0.8;
             display: inline-block;
             margin: 0 10px;
             transition: opacity 0.3s;
+        }
+
+        .menu-items a:hover {
+            text-decoration: underline;
         }
 
         .dropdown:hover .menu-items {
@@ -71,14 +75,14 @@
 
         .top-nav a {
             color: white;
-            text-decoration: underline;
-            font-size: 14px;
+            text-decoration: none;
+            font-size: 12px;
             opacity: 0.8;
             transition: opacity 0.3s;
         }
 
         .top-nav a:hover {
-            opacity: 1;
+            text-decoration: underline;
         }
 
         .controls {
@@ -193,26 +197,17 @@
         .next {
             right: 20px;
         }
-
-        .active-series {
-            opacity: 1 !important;
-        }
-
-        .active-series::before {
-            content: '>';
-            margin-right: 5px;
-        }
     </style>
 </head>
 <body>
     <div class="gallery-container">
-        <div class="image-counter">1 / 15</div>
+        <div class="image-counter">10 / 15</div>
         <div class="top-nav">
             <a href="info.html">Info</a>
             <div class="dropdown">
                 <a href="#" class="dropbtn">Series</a>
                 <div class="menu-items">
-                    <a href="un.html" class="active-series">UN General Assembly</a>
+                    <a href="un.html">UN General Assembly</a>
                     <a href="sailing.html">Sailing Documentation</a>
                     <a href="newengland.html">New England</a>
                     <a href="newyork.html">New York</a>
