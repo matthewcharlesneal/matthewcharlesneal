@@ -30,6 +30,8 @@
             left: 20px;
             color: #fff;
             z-index: 2;
+            font-size: 12px; /* Smaller counter text */
+            opacity: 0.8;
         }
 
         .controls {
@@ -44,8 +46,14 @@
             border: none;
             color: #fff;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 5px;
             margin-left: 10px;
+            font-size: 12px; /* Smaller fullscreen icon */
+            opacity: 0.8;
+        }
+
+        .controls button:hover {
+            opacity: 1;
         }
 
         .image-container {
@@ -93,38 +101,36 @@
         <div class="image-counter">1 / 15</div>
         <div class="controls">
             <button onclick="toggleFullscreen()">⛶</button>
-            <button onclick="toggleSlideshow()">▶</button>
         </div>
         <button class="nav-button prev" onclick="prevImage()">←</button>
         <div class="image-container">
-            <img src="images/UN_1.jpg" alt="UN General Assembly image" class="gallery-image">
+            <img src="./images/UN_1.jpg" alt="UN General Assembly image" class="gallery-image">
         </div>
         <button class="nav-button next" onclick="nextImage()">→</button>
     </div>
 
     <script>
         const images = [
-            'images/UN_1.jpg',
-            'images/UN_2.jpg',
-            'images/UN_3.jpg',
-            'images/UN_4.jpg',
-            'images/UN_5.jpg',
-            'images/UN_6.jpg',
-            'images/UN_7.jpg',
-            'images/UN_8.jpg',
-            'images/UN_9.jpg',
-            'images/UN_10.jpg',
-            'images/UN_11.jpg',
-            'images/UN_12.jpg',
-            'images/UN_13.jpg',
-            'images/UN_14.jpg',
-            'images/UN_15.jpg'
+            './images/UN_1.jpg',
+            './images/UN_2.jpg',
+            './images/UN_3.jpg',
+            './images/UN_4.jpg',
+            './images/UN_5.jpg',
+            './images/UN_6.jpg',
+            './images/UN_7.jpg',
+            './images/UN_8.jpg',
+            './images/UN_9.jpg',
+            './images/UN_10.jpg',
+            './images/UN_11.jpg',
+            './images/UN_12.jpg',
+            './images/UN_13.jpg',
+            './images/UN_14.jpg',
+            './images/UN_15.jpg'
         ];
         
         let currentIndex = 0;
         const imageElement = document.querySelector('.gallery-image');
         const counter = document.querySelector('.image-counter');
-        let slideshowInterval = null;
         
         function updateImage() {
             imageElement.src = images[currentIndex];
@@ -146,15 +152,6 @@
                 document.documentElement.requestFullscreen();
             } else {
                 document.exitFullscreen();
-            }
-        }
-
-        function toggleSlideshow() {
-            if (slideshowInterval) {
-                clearInterval(slideshowInterval);
-                slideshowInterval = null;
-            } else {
-                slideshowInterval = setInterval(nextImage, 3000); // Change image every 3 seconds
             }
         }
 
