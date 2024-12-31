@@ -44,35 +44,6 @@
             align-items: center;
         }
 
-        .menu-items {
-            position: fixed;
-            top: 15px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            display: none;
-            z-index: 1;
-        }
-
-        .menu-items a {
-            color: white;
-            text-decoration: none;
-            padding: 5px 0;
-            font-size: 12px;
-            opacity: 0.8;
-            display: inline-block;
-            margin: 0 10px;
-            transition: opacity 0.3s;
-        }
-
-        .menu-items a:hover {
-            text-decoration: underline;
-        }
-
-        .dropdown:hover .menu-items {
-            display: block;
-        }
-
         .top-nav a {
             color: white;
             text-decoration: none;
@@ -237,15 +208,7 @@
         <div class="image-counter">1 / 15</div>
         <div class="top-nav">
             <a href="info.html">Info</a>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Series</a>
-                <div class="menu-items">
-                    <a href="un.html">UN General Assembly</a>
-                    <a href="sailing.html">Sailing Documentation</a>
-                    <a href="newengland.html">New England</a>
-                    <a href="newyork.html">New York</a>
-                </div>
-            </div>
+            <a href="series.html">Series</a>
         </div>
         <div class="controls">
             <button onclick="toggleFullscreen()">
