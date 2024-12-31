@@ -1,5 +1,3 @@
-thank you this makes sense. Do you think you can help me update my current website code to simplify it? I currently have a popup menu for 'Series' but I don't like how this works so I prefer just having a clickable link to the series page. I also want to change the full screen icon to the image attached. Additionally, when I use the arrows to navigate, there is a box that appears around the arrows and I do not want a box to be visible. Finally, all of the text and the icons at the top need to be in line with each other, they are not currently in line. Can you help me update this? Please keep the code modular to I can copy the html, css, and js separately. Here is my initial code that I want updated:
-
 document.addEventListener('DOMContentLoaded', () => {
     const imageContainer = document.querySelector('.image-container');
     const images = Array.from(document.querySelectorAll('.image'));
