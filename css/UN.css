@@ -5,10 +5,12 @@ body {
     color: #fff;
     font-family: Arial, sans-serif;
     height: 100vh;
+    overflow: hidden;
 }
 
 .gallery-container {
     position: relative;
+    width: 100%;
     height: 100vh;
     display: flex;
     align-items: center;
@@ -17,18 +19,23 @@ body {
 
 .top-bar {
     position: fixed;
-    top: 14px;
+    top: 0;
     left: 0;
     right: 0;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 20px;
     z-index: 2;
+}
+
+.image-counter {
+    font-size: 12px;
+    opacity: 0.8;
 }
 
 .navigation {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     align-items: center;
 }
 
@@ -36,8 +43,12 @@ body {
     color: white;
     text-decoration: none;
     font-size: 12px;
+    text-transform: capitalize;
     opacity: 0.8;
     transition: opacity 0.3s;
+}
+
+.fullscreen-btn {
     background: none;
     border: none;
     padding: 0;
@@ -48,13 +59,8 @@ body {
     opacity: 1;
 }
 
-.image-counter {
-    font-size: 12px;
-    opacity: 0.8;
-}
-
 .nav-button {
-    position: absolute;
+    position: fixed;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
@@ -63,13 +69,17 @@ body {
     font-size: 24px;
     cursor: pointer;
     padding: 20px;
-    opacity: 0.7;
+    opacity: 0;
     transition: opacity 0.3s;
-    outline: none;
+    z-index: 2;
+}
+
+.gallery-container:hover .nav-button {
+    opacity: 0.7;
 }
 
 .nav-button:hover {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 .prev {
@@ -81,12 +91,18 @@ body {
 }
 
 .image-container {
-    max-width: 90%;
-    max-height: 90vh;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 60px;
+    box-sizing: border-box;
 }
 
 .gallery-image {
     max-width: 100%;
-    max-height: 90vh;
+    max-height: 100vh;
+    object-fit: contain;
     display: block;
 }
