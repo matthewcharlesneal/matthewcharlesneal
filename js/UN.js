@@ -53,42 +53,81 @@ function toggleFullscreen() {
 }
 
 // Mobile touch handling
+let touchStartX = null;
+let touchStartY = null;
+let isMobile = window.innerWidth <= 600;
+
 function handleTouchStart(e) {
-    if (window.innerWidth <= 600) {
+    if (isMobile) {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
     }
 }
 
 function handleTouchMove(e) {
-    if (window.innerWidth <= 600 && touchStartX !== null) {
-        const touchEndX = e.touches[0].clientX;
-        const touchEndY = e.touches[0].clientY;
-        
-        const deltaX = touchStartX - touchEndX;
-        const deltaY = touchStartY - touchEndY;
-        
-        // Only handle horizontal swipes if they're more horizontal than vertical
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            e.preventDefault(); // Prevent scrolling
+    if (!isMobile || !touchStartX) return;
+    e.preventDefault(); // Prevent scrolling
 
-            if (deltaX > 50) { // Swipe left
-                if (currentIndex < images.length - 1) {
-                    currentIndex++;
-                    updateImage();
-                }
-            } else if (deltaX < -50) { // Swipe right
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    updateImage();
-                }
+    const touchEndX = e.touches[0].clientX;
+    const touchEndY = e.touches[0].clientY;
+    const deltaX = touchStartX - touchEndX;
+    const deltaY = Math.abs(touchStartY - e.touches[0].clientY);
+
+    // Only handle horizontal swipes
+    if (deltaY < 50) {
+        if (Math.abs(deltaX) > 50) {
+            if (deltaX > 0) {
+                nextImage();
+            } else {
+                prevImage();
             }
-            
             touchStartX = null;
             touchStartY = null;
         }
     }
 }
+
+function handleTouchEnd() {
+    touchStartX = null;
+    touchStartY = null;
+}
+
+function checkOrientation() {
+    if (isMobile) {
+        if (window.matchMedia("(orientation: landscape)").matches) {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen()
+                    .catch(err => console.log('Fullscreen error:', err));
+            }
+        } else if (document.fullscreenElement) {
+            document.exitFullscreen()
+                .catch(err => console.log('Exit fullscreen error:', err));
+        }
+    }
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('swipeContainer');
+    
+    // Touch events
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd);
+
+    // Orientation change
+    window.addEventListener('orientationchange', () => {
+        setTimeout(checkOrientation, 100);
+    });
+
+    // Initial orientation check
+    checkOrientation();
+
+    // Prevent default touch behavior
+    document.body.addEventListener('touchmove', (e) => {
+        if (isMobile) e.preventDefault();
+    }, { passive: false });
+});
 
 function handleTouchEnd() {
     touchStartX = null;
