@@ -201,6 +201,12 @@
         .next {
             right: 20px;
         }
+
+        @media (max-width: 600px) {
+            .desktop-only {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -210,7 +216,7 @@
             <a href="info.html">Info</a>
             <a href="series.html">Series</a>
         </div>
-        <div class="controls">
+        <div class="controls desktop-only">
             <button onclick="toggleFullscreen()">
                 <span class="fullscreen-icon">
                     <span></span>
@@ -218,11 +224,11 @@
                 <span class="close-icon"></span>
             </button>
         </div>
-        <button class="nav-button prev" onclick="prevImage()">←</button>
-        <div class="image-container">
+        <button class="nav-button prev desktop-only" onclick="prevImage()">←</button>
+        <div class="image-container" id="swipeContainer">
             <img src="./images/UN_1.jpg" alt="UN General Assembly image" class="gallery-image">
         </div>
-        <button class="nav-button next" onclick="nextImage()">→</button>
+        <button class="nav-button next desktop-only" onclick="nextImage()">→</button>
     </div>
 
     <script>
