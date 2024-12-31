@@ -8,7 +8,7 @@ const images = [
     './images/UN_7.jpg',
     './images/UN_8.jpg',
     './images/UN_9.jpg',
-    './images/UN_10.jpg',
+    
     './images/UN_11.jpg',
     './images/UN_12.jpg',
     './images/UN_13.jpg',
