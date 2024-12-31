@@ -4,262 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UN General Assembly Gallery</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .gallery-container {
-            position: relative;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .image-counter {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #fff;
-            z-index: 2;
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .top-nav {
-            position: absolute;
-            top: 15px;
-            right: 60px;
-            z-index: 2;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .menu-items {
-            position: fixed;
-            top: 15px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            display: none;
-            z-index: 1;
-        }
-
-        .menu-items a {
-            color: white;
-            text-decoration: none;
-            padding: 5px 0;
-            font-size: 12px;
-            opacity: 0.8;
-            display: inline-block;
-            margin: 0 10px;
-            transition: opacity 0.3s;
-        }
-
-        .menu-items a:hover {
-            text-decoration: underline;
-        }
-
-        .dropdown:hover .menu-items {
-            display: block;
-        }
-
-        .top-nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 12px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-
-        .top-nav a:hover {
-            text-decoration: underline;
-        }
-
-        .controls {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            z-index: 2;
-        }
-
-        .controls button {
-            background: transparent;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            padding: 0;
-            opacity: 0.8;
-            width: 24px;
-            height: 24px;
-            position: relative;
-        }
-
-        .controls button:hover {
-            opacity: 1;
-        }
-
-        .fullscreen-icon {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .fullscreen-icon::before,
-        .fullscreen-icon::after,
-        .fullscreen-icon span::before,
-        .fullscreen-icon span::after {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border: 1px solid #fff;
-        }
-
-        /* Top-left corner */
-        .fullscreen-icon::before {
-            top: 0;
-            left: 0;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        /* Top-right corner */
-        .fullscreen-icon::after {
-            top: 0;
-            right: 0;
-            border-left: none;
-            border-bottom: none;
-        }
-
-        /* Bottom-left corner */
-        .fullscreen-icon span::before {
-            bottom: 0;
-            left: 0;
-            border-right: none;
-            border-top: none;
-        }
-
-        /* Bottom-right corner */
-        .fullscreen-icon span::after {
-            bottom: 0;
-            right: 0;
-            border-left: none;
-            border-top: none;
-        }
-
-        .close-icon {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: none;
-        }
-
-        .close-icon::before,
-        .close-icon::after {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 1px;
-            background-color: #fff;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-        }
-
-        .close-icon::after {
-            transform: translate(-50%, -50%) rotate(-45deg);
-        }
-
-        :fullscreen .close-icon {
-            display: block;
-        }
-
-        :fullscreen .fullscreen-icon {
-            display: none;
-        }
-
-        :fullscreen .top-nav {
-            display: none;
-        }
-
-        .image-container {
-            max-width: 90%;
-            max-height: 90%;
-            position: relative;
-        }
-
-        .gallery-image {
-            max-width: 100%;
-            max-height: 90vh;
-            display: block;
-            margin: auto;
-        }
-
-        .nav-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 20px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-
-        .nav-button:hover {
-            opacity: 1;
-        }
-
-        .prev {
-            left: 20px;
-        }
-
-        .next {
-            right: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="gallery-container">
-        <div class="image-counter">1 / 15</div>
-        <div class="top-nav">
-            <a href="info.html">Info</a>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Series</a>
-                <div class="menu-items">
-                    <a href="un.html">UN General Assembly</a>
-                    <a href="sailing.html">Sailing Documentation</a>
-                    <a href="newengland.html">New England</a>
-                    <a href="newyork.html">New York</a>
-                </div>
-            </div>
+        <div class="top-bar">
+            <span class="image-counter">1 / 15</span>
+            <nav class="navigation">
+                <a href="info.html">Info</a>
+                <a href="series.html">Series</a>
+                <button class="fullscreen-btn">⤢</button>
+            </nav>
         </div>
-        <div class="controls">
-            <button onclick="toggleFullscreen()">
-                <span class="fullscreen-icon">
-                    <span></span>
-                </span>
-                <span class="close-icon"></span>
-            </button>
-        </div>
-        <button class="nav-button prev" onclick="prevImage()">←</button>
+        
+        <button class="nav-button prev" aria-label="Previous">←</button>
         <div class="image-container">
             <img src="./images/UN_1.jpg" alt="UN General Assembly image" class="gallery-image">
         </div>
-        <button class="nav-button next" onclick="nextImage()">→</button>
+        <button class="nav-button next" aria-label="Next">→</button>
     </div>
 
     <script>
@@ -273,33 +35,33 @@
             './images/UN_7.jpg',
             './images/UN_8.jpg',
             './images/UN_9.jpg',
-            './images/UN_10.jpg',
+            
             './images/UN_11.jpg',
             './images/UN_12.jpg',
             './images/UN_13.jpg',
             './images/UN_14.jpg',
             './images/UN_15.jpg'
         ];
-        
+
         let currentIndex = 0;
         const imageElement = document.querySelector('.gallery-image');
         const counter = document.querySelector('.image-counter');
-        
+
         function updateImage() {
             imageElement.src = images[currentIndex];
             counter.textContent = `${currentIndex + 1} / ${images.length}`;
         }
-        
+
         function nextImage() {
             currentIndex = (currentIndex + 1) % images.length;
             updateImage();
         }
-        
+
         function prevImage() {
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateImage();
         }
-        
+
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
@@ -308,7 +70,10 @@
             }
         }
 
-        // Keyboard navigation
+        document.querySelector('.next').addEventListener('click', nextImage);
+        document.querySelector('.prev').addEventListener('click', prevImage);
+        document.querySelector('.fullscreen-btn').addEventListener('click', toggleFullscreen);
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') nextImage();
             if (e.key === 'ArrowLeft') prevImage();
