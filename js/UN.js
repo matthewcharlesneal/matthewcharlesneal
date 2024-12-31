@@ -8,12 +8,12 @@ const images = [
     './images/UN_7.jpg',
     './images/UN_8.jpg',
     './images/UN_9.jpg',
-    
+    './images/UN_10.jpg',
     './images/UN_11.jpg',
     './images/UN_12.jpg',
     './images/UN_13.jpg',
     './images/UN_14.jpg',
-    './images/UN_15.jpg',
+    './images/UN_15.jpg'
 ];
 
 let currentIndex = 0;
@@ -48,6 +48,7 @@ document.querySelector('.next').addEventListener('click', nextImage);
 document.querySelector('.prev').addEventListener('click', prevImage);
 document.querySelector('.fullscreen-btn').addEventListener('click', toggleFullscreen);
 
+// Keyboard navigation
 document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') nextImage();
     if (e.key === 'ArrowLeft') prevImage();
@@ -55,3 +56,6 @@ document.addEventListener('keydown', (e) => {
         document.exitFullscreen();
     }
 });
+
+// Initial load
+updateImage();
