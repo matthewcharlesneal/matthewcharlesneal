@@ -1,78 +1,57 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const imageContainer = document.querySelector('.image-container');
-    const images = Array.from(document.querySelectorAll('.image'));
-    let currentIndex = 0;
-    let isTransitioning = false;
+const images = [
+    './images/UN_1.jpg',
+    './images/UN_2.jpg',
+    './images/UN_3.jpg',
+    './images/UN_4.jpg',
+    './images/UN_5.jpg',
+    './images/UN_6.jpg',
+    './images/UN_7.jpg',
+    './images/UN_8.jpg',
+    './images/UN_9.jpg',
+    './images/UN_10.jpg',
+    './images/UN_11.jpg',
+    './images/UN_12.jpg',
+    './images/UN_13.jpg',
+    './images/UN_14.jpg',
+    './images/UN_15.jpg',
+];
 
-    // Only for mobile devices
-    function showImage(index) {
-        if (window.innerWidth <= 600) {
-            if (isTransitioning) return;
-            isTransitioning = true;
+let currentIndex = 0;
+const imageElement = document.querySelector('.gallery-image');
+const counter = document.querySelector('.image-counter');
 
-            const targetImage = images[index];
-            targetImage.scrollIntoView({ behavior: "smooth", block: "start" });
+function updateImage() {
+    imageElement.src = images[currentIndex];
+    counter.textContent = `${currentIndex + 1} / ${images.length}`;
+}
 
-            setTimeout(() => {
-                isTransitioning = false;
-            }, 1250);
-        }
+function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    updateImage();
+}
+
+function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    updateImage();
+}
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
     }
+}
 
-    // Mobile touch events
-    let initialTouchPos = null;
+// Event Listeners
+document.querySelector('.next').addEventListener('click', nextImage);
+document.querySelector('.prev').addEventListener('click', prevImage);
+document.querySelector('.fullscreen-btn').addEventListener('click', toggleFullscreen);
 
-    function handleTouchStart(event) {
-        if (window.innerWidth <= 600) {
-            initialTouchPos = event.touches[0].clientY;
-        }
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'Escape' && document.fullscreenElement) {
+        document.exitFullscreen();
     }
-
-    function handleTouchMove(event) {
-        if (window.innerWidth <= 600) {
-            if (isTransitioning || initialTouchPos === null) return;
-
-            const currentTouchPos = event.touches[0].clientY;
-            const touchDelta = initialTouchPos - currentTouchPos;
-
-            if (touchDelta > 20 && currentIndex < images.length - 1) {
-                currentIndex++;
-                showImage(currentIndex);
-            } else if (touchDelta < -20 && currentIndex > 0) {
-                currentIndex--;
-                showImage(currentIndex);
-            }
-
-            initialTouchPos = null;
-        }
-    }
-
-    // Menu functionality
-    const menuToggle = document.getElementById('menuToggle');
-    const menuList = document.getElementById('menuList');
-    const closeMenu = document.getElementById('closeMenu');
-
-    menuToggle?.addEventListener('click', () => {
-        menuList.classList.toggle('show');
-        closeMenu.classList.toggle('show');
-    });
-
-    closeMenu?.addEventListener('click', () => {
-        menuList.classList.remove('show');
-        closeMenu.classList.remove('show');
-    });
-
-    // Mobile event listeners
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-
-    // Handle orientation change on mobile
-    window.addEventListener('orientationchange', () => {
-        if (window.innerWidth <= 600) {
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-                showImage(currentIndex);
-            }, 100);
-        }
-    });
 });
