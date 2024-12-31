@@ -21,6 +21,7 @@ const imageElement = document.querySelector('.gallery-image');
 const counter = document.querySelector('.image-counter');
 let touchStartX = null;
 let touchStartY = null;
+let isMobile = window.innerWidth <= 600;
 
 // Update image and counter
 function updateImage() {
@@ -28,19 +29,15 @@ function updateImage() {
     counter.textContent = `${currentIndex + 1} / ${images.length}`;
 }
 
-// Desktop navigation functions
+// Navigation functions
 function nextImage() {
-    if (window.innerWidth > 600) {
-        currentIndex = (currentIndex + 1) % images.length;
-        updateImage();
-    }
+    currentIndex = (currentIndex + 1) % images.length;
+    updateImage();
 }
 
 function prevImage() {
-    if (window.innerWidth > 600) {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        updateImage();
-    }
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    updateImage();
 }
 
 // Desktop fullscreen toggle
@@ -53,10 +50,6 @@ function toggleFullscreen() {
 }
 
 // Mobile touch handling
-let touchStartX = null;
-let touchStartY = null;
-let isMobile = window.innerWidth <= 600;
-
 function handleTouchStart(e) {
     if (isMobile) {
         touchStartX = e.touches[0].clientX;
@@ -92,7 +85,8 @@ function handleTouchEnd() {
     touchStartY = null;
 }
 
-function checkOrientation() {
+// Handle orientation changes
+function handleOrientationChange() {
     if (isMobile) {
         if (window.matchMedia("(orientation: landscape)").matches) {
             if (!document.fullscreenElement) {
@@ -102,51 +96,6 @@ function checkOrientation() {
         } else if (document.fullscreenElement) {
             document.exitFullscreen()
                 .catch(err => console.log('Exit fullscreen error:', err));
-        }
-    }
-}
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('swipeContainer');
-    
-    // Touch events
-    container.addEventListener('touchstart', handleTouchStart, { passive: false });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd);
-
-    // Orientation change
-    window.addEventListener('orientationchange', () => {
-        setTimeout(checkOrientation, 100);
-    });
-
-    // Initial orientation check
-    checkOrientation();
-
-    // Prevent default touch behavior
-    document.body.addEventListener('touchmove', (e) => {
-        if (isMobile) e.preventDefault();
-    }, { passive: false });
-});
-
-function handleTouchEnd() {
-    touchStartX = null;
-    touchStartY = null;
-}
-
-// Auto fullscreen in landscape mode for mobile
-function handleOrientationChange() {
-    if (window.innerWidth <= 600) {
-        if (window.orientation === 90 || window.orientation === -90) {
-            // Landscape mode
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            }
-        } else {
-            // Portrait mode
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            }
         }
     }
 }
@@ -170,8 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
     swipeContainer.addEventListener('touchmove', handleTouchMove, {passive: false});
     swipeContainer.addEventListener('touchend', handleTouchEnd);
 
-    // Orientation change
-    window.addEventListener('orientationchange', handleOrientationChange);
+    // Prevent default touch behavior on body
+    document.body.addEventListener('touchmove', (e) => {
+        if (isMobile) e.preventDefault();
+    }, { passive: false });
+
+    // Orientation change events
+    window.addEventListener('orientationchange', () => {
+        setTimeout(handleOrientationChange, 100);
+    });
     window.addEventListener('resize', handleOrientationChange);
 
     // Initial setup
